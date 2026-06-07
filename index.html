@@ -132,7 +132,8 @@
   .cell h3 { margin: 0 0 8px; font-size: 19px; font-weight: 650; }
   .cell p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.65; }
   .cell-big { grid-column: span 2; grid-row: span 2; }
-  .cell-wide { grid-column: span 2; }
+  .cell-wide { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; }
+  .cell-wide h3 { white-space: nowrap; margin: 0; }
   .cell-paper { background: var(--paper); }
   .cell-blue { background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
   .cell-img { margin: auto -26px -26px; }
@@ -143,7 +144,8 @@
     .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; }
     .cell { min-height: 170px; }
     .cell-big { grid-column: span 2; grid-row: auto; }
-    .cell-wide { grid-column: span 2; }
+    .cell-wide { grid-column: span 2; flex-direction: column; align-items: flex-start; gap: 0; }
+    .cell-wide h3 { white-space: normal; margin: 0 0 8px; }
     .cell-img img { height: 180px; }
   }
   @media (max-width: 560px) {
@@ -187,9 +189,9 @@
   .foot-links a:hover { color: var(--ink); }
   .copyright { width: 100%; color: var(--muted); font-size: 13.5px; margin-top: 14px; }
 
-  /* ---- 滚动显现（reduced-motion 时静止）---- */
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); transition-delay: var(--d, 0s); }
-  .reveal.in { opacity: 1; transform: none; }
+  /* ---- 滚动显现（仅 JS 可用时隐藏初始态；reduced-motion 时静止）---- */
+  .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); transition-delay: var(--d, 0s); }
+  .js .reveal.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     .btn, .btn-ghost, .cell { transition: none; }
@@ -344,15 +346,15 @@
 
 <script>
   (function () {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
-      return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      return; /* 不加 .js：所有内容保持可见 */
     }
+    document.documentElement.classList.add("js");
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
       });
-    }, { threshold: 0.18 });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
     document.querySelectorAll(".reveal:not(.in)").forEach(function (el) { io.observe(el); });
   })();
 </script>
