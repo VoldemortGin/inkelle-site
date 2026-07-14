@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 助手 — Inkelle 使用指南</title>
+<meta name="description" content="端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、套索转 AI、快捷指令" />
+<link rel="icon" type="image/png" href="../assets/app-icon.png" />
+<meta property="og:title" content="AI 助手 — Inkelle 使用指南" />
+<meta property="og:description" content="端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、套索转 AI、快捷指令" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://inkelle.pages.dev/assets/screenshot-1.png" />
+<style>
+  :root {
+    --ink: #1f1912;
+    --ink-soft: #4a4234;
+    --muted: #6b6151;
+    --rule: #e7ddc8;
+    --bg: #fdf8f0;
+    --surface: #ffffff;
+    --paper: #faf3e3;
+    --accent: #3b78c4;
+    --accent-ink: #2c5fa3;
+    --r-btn: 12px;
+    --r-card: 16px;
+    --r-device: 24px;
+    --shadow-tint: 31, 25, 18;
+    --code-bg: #f1e9d8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #f0e8d8;
+      --ink-soft: #cfc5b0;
+      --muted: #9a8f7a;
+      --rule: #322b20;
+      --bg: #161209;
+      --surface: #1f1a10;
+      --paper: #241e12;
+      --accent: #6aa1dd;
+      --accent-ink: #8db8e8;
+      --shadow-tint: 0, 0, 0;
+      --code-bg: #2a2416;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.7; font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Songti SC", "Noto Serif SC", Georgia, "Times New Roman", serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { display: block; max-width: 100%; height: auto; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- nav (shared with index.html) ---- */
+  .nav {
+    position: sticky; top: 0; z-index: 10; height: 64px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; gap: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; font-size: 19px; }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; font-size: 15px; }
+  .nav-links a { color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav .btn { margin-left: 4px; }
+  @media (max-width: 760px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--ink); color: var(--bg);
+    border-radius: var(--r-btn); padding: 12px 22px;
+    font-size: 16px; font-weight: 600; letter-spacing: .01em;
+    transition: transform .18s cubic-bezier(.16,1,.3,1), background .18s;
+  }
+  .btn:hover { transform: translateY(-1px); text-decoration: none; }
+  .btn:active { transform: scale(.98); }
+  .btn svg { width: 18px; height: 18px; fill: currentColor; }
+  .btn.small { padding: 8px 16px; font-size: 14px; }
+
+  /* ---- breadcrumb ---- */
+  .crumb { font-size: 14.5px; color: var(--muted); padding: 26px 0 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .crumb a { color: var(--ink-soft); }
+  .crumb a:hover { color: var(--ink); }
+  .crumb .sep { color: var(--rule); }
+
+  /* ---- guide layout: article + sticky TOC ---- */
+  .guide-layout {
+    max-width: 1080px; margin: 0 auto; padding: 8px 24px 24px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 56px; align-items: start;
+  }
+  .toc { position: sticky; top: 88px; font-size: 14.5px; }
+  .toc-title { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .toc li { margin: 0; }
+  .toc a { display: block; color: var(--ink-soft); padding: 5px 0 5px 14px; margin-left: -1px; border-left: 2px solid transparent; line-height: 1.45; }
+  .toc a:hover { color: var(--ink); border-left-color: var(--accent); text-decoration: none; }
+  @media (max-width: 900px) { .guide-layout { grid-template-columns: 1fr; gap: 0; } .toc { display: none; } }
+
+  /* ---- article typography ---- */
+  article { min-width: 0; }
+  article h1 { font-size: clamp(30px, 4.4vw, 42px); line-height: 1.25; font-weight: 700; margin: 18px 0 8px; letter-spacing: .01em; }
+  .lede { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  article h2 { font-size: clamp(22px, 2.8vw, 28px); line-height: 1.35; font-weight: 700; margin: 52px 0 14px; padding-top: 8px; scroll-margin-top: 84px; }
+  article h2:first-of-type { margin-top: 32px; }
+  article h3 { font-size: 19px; font-weight: 650; margin: 32px 0 10px; scroll-margin-top: 84px; }
+  article p { margin: 0 0 16px; color: var(--ink); }
+  article ul, article ol { margin: 0 0 16px; padding-left: 26px; }
+  article li { margin: 6px 0; }
+  article li > ul, article li > ol { margin: 6px 0 4px; }
+  article strong { font-weight: 650; }
+  article a { color: var(--accent); font-weight: 500; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--code-bg); padding: 1.5px 6px; border-radius: 5px; font-size: .88em;
+  }
+  article hr { border: none; border-top: 1px solid var(--rule); margin: 44px 0; }
+
+  /* ---- tip / blockquote ---- */
+  blockquote.tip {
+    margin: 22px 0; padding: 14px 18px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    border-radius: var(--r-btn); color: var(--ink-soft); font-size: 15.5px;
+  }
+  blockquote.tip p { margin: 0 0 8px; }
+  blockquote.tip p:last-child { margin: 0; }
+  blockquote.tip strong { color: var(--ink); }
+
+  /* ---- tables ---- */
+  .table-scroll { overflow-x: auto; margin: 20px 0; border: 1px solid var(--rule); border-radius: var(--r-card); }
+  article table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  article th, article td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  article thead th { background: var(--paper); font-weight: 650; color: var(--ink); white-space: nowrap; }
+  article tbody tr:last-child td { border-bottom: none; }
+  article td code { white-space: nowrap; }
+
+  /* ---- prev / next ---- */
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 56px 0 8px; }
+  .pager a, .pager span {
+    display: flex; flex-direction: column; gap: 4px;
+    border: 1px solid var(--rule); border-radius: var(--r-card); padding: 16px 20px;
+    background: var(--surface); transition: transform .18s cubic-bezier(.16,1,.3,1), border-color .18s;
+  }
+  .pager a:hover { transform: translateY(-2px); border-color: var(--muted); text-decoration: none; }
+  .pager .dir { font-size: 13px; color: var(--muted); }
+  .pager .ttl { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .pager .next { text-align: right; }
+  .pager span { opacity: .45; }
+  @media (max-width: 560px) { .pager { grid-template-columns: 1fr; } .pager .next { text-align: left; } }
+
+  /* ---- guide index (TOC hub) ---- */
+  .guide-hero { padding: 44px 0 8px; max-width: 720px; }
+  .badge {
+    display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .02em;
+    color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--rule));
+    border-radius: 999px; padding: 4px 14px; margin-bottom: 20px;
+  }
+  .guide-hero h1 { font-size: clamp(34px, 4.6vw, 50px); line-height: 1.2; font-weight: 700; margin: 0 0 16px; }
+  .guide-hero p { font-size: 18px; color: var(--ink-soft); margin: 0; }
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 40px 0 8px; }
+  .gcard {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card);
+    padding: 22px; transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
+  }
+  .gcard:hover { transform: translateY(-3px); box-shadow: 0 14px 38px rgba(var(--shadow-tint), .10); text-decoration: none; }
+  .gcard .num {
+    flex: none; width: 38px; height: 38px; border-radius: 10px;
+    background: var(--paper); border: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: var(--accent-ink);
+  }
+  .gcard h3 { margin: 2px 0 6px; font-size: 18px; font-weight: 650; color: var(--ink); }
+  .gcard p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  @media (max-width: 720px) { .card-grid { grid-template-columns: 1fr; } }
+
+  .conventions { max-width: 760px; margin: 64px 0 8px; }
+  .conventions h2 { font-size: 24px; font-weight: 700; margin: 0 0 14px; }
+  .conventions ul { padding-left: 22px; color: var(--ink-soft); }
+  .conventions li { margin: 8px 0; }
+  .conventions strong { color: var(--ink); }
+
+  /* ---- footer (shared with index.html) ---- */
+  footer { border-top: 1px solid var(--rule); padding: 40px 0 56px; margin-top: 40px; }
+  .foot-inner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .foot-inner .brand { font-size: 17px; }
+  .foot-links { display: flex; gap: 20px; margin-left: auto; font-size: 14.5px; flex-wrap: wrap; }
+  .foot-links a { color: var(--ink-soft); }
+  .foot-links a:hover { color: var(--ink); }
+  .copyright { width: 100%; color: var(--muted); font-size: 13.5px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="../assets/app-icon.png" alt="Inkelle 图标" width="28" height="28" /><span class="serif">Inkelle</span></a>
+    <div class="nav-links">
+      <a href="../index.html">官网首页</a>
+      <a href="index.html">使用指南</a>
+      <a href="../index.html#faq">常见问题</a>
+    </div>
+    <a class="btn small" href="https://apps.apple.com/app/id6774624375"><svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>在 App Store 下载</a>
+  </div>
+</nav>
+<div class="crumb wrap">
+  <a href="../index.html">官网首页</a><span class="sep">/</span>
+  <a href="index.html">使用指南</a><span class="sep">/</span>
+  <span>第 06 章</span>
+</div>
+<div class="guide-layout">
+    <article>
+      <p class="lede">Inkelle 使用指南 · 第 06 章 · 对应 App v1.6</p>
+      <h1 class="serif">AI 助手</h1>
+<p>Inkelle 内置一个 <strong>AI 助手</strong>，能帮你总结笔记、解数学题、生成抽认卡和测验、润色文字。这一章说明它怎么用、两种「引擎」有什么区别、你的笔记数据会不会被上传，以及从哪些地方能唤起它。本章解决的是「AI 到底能帮我做什么、安不安全」的问题。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：AI 助手的主入口在画布右上角的 <strong>⋯ 菜单 → AI 助手</strong>。</p></blockquote>
+<h2 id="s1">两种 AI 引擎</h2>
+<p>Inkelle 支持两种 AI 引擎，你可以在 <strong>设置 → AI 助手 → AI 引擎</strong> 里切换：</p>
+<div class="table-scroll"><table><thead><tr><th>选项</th><th>说明</th></tr></thead><tbody><tr><td><strong>自动（推荐）</strong></td><td>优先用端上模型；端上不可用时，如果你配置了 DeepSeek Key，就用 DeepSeek。</td></tr><tr><td><strong>端上模型</strong></td><td>完全在你的设备上运行，<strong>免费</strong>、<strong>不联网</strong>、<strong>笔记内容不出设备</strong>。</td></tr><tr><td><strong>DeepSeek（自带 Key）</strong></td><td>用你自己的 DeepSeek API Key（BYOK），能处理更长的笔记，但会把内容发送到 DeepSeek 服务器。</td></tr></tbody></table></div>
+<p><strong>端上模型</strong>依托 Apple 智能，用它<strong>零配置、零费用、最私密</strong>。但它有使用条件，设置里的「端上模型」状态行会告诉你当前是否<strong>可用</strong>；不可用时会显示原因：</p>
+<ul><li><strong>本设备不支持端上 AI</strong> —— 你的设备型号不支持。</li><li><strong>尚未开启 Apple 智能</strong> —— 去系统「设置」里开启 Apple 智能后即可用。</li><li><strong>端上模型尚未就绪（正在下载或准备中）</strong> —— 稍等模型下载完成。</li><li><strong>需 iOS 26 及兼容设备</strong> —— 系统版本或设备不满足要求。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：如果你想彻底不联网、又不想配置任何 Key，就把引擎设为<strong>端上模型</strong>（或保持<strong>自动</strong>并让它优先走端上）。端上模型处理不了特别长的笔记时，会提示你切到 DeepSeek。</p></blockquote>
+<h2 id="s2">隐私与授权</h2>
+<p><strong>端上模型不发送任何数据</strong>——笔记内容完全在本机处理，无需联网或 API Key。</p>
+<p>只有当你使用 <strong>DeepSeek</strong> 引擎时，Inkelle 才会把笔记内容发送到 DeepSeek 服务器，因此<strong>第一次使用前会请你确认「AI 数据使用授权」</strong>。授权页会清楚列出会发送哪些内容：</p>
+<ul><li><strong>标题</strong></li><li><strong>标签</strong></li><li><strong>正文（键入或导入的文字）</strong></li><li><strong>手写识别（OCR）文字</strong></li></ul>
+<p>这些内容会发送到 DeepSeek（第三方服务器）用于生成结果，Inkelle 不会用它存储或作其他用途。看完点「<strong>同意并继续</strong>」即可开始使用。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：这项授权<strong>完全可选</strong>，只有你主动使用 AI 功能时才会发送数据。你可以<strong>随时</strong>在 <strong>设置 → AI 助手</strong> 里点「<strong>撤销 AI 数据使用授权</strong>」收回它。</p></blockquote>
+<h2 id="s3">设置里的 AI 区</h2>
+<p>在 <strong>设置 → AI 助手</strong> 里：</p>
+<ul><li><strong>启用 AI 助手</strong>：总开关。</li><li><strong>AI 引擎</strong>：见上文（自动 / 端上模型 / DeepSeek）。</li><li><strong>端上模型</strong>状态：显示端上是否<strong>可用</strong>。</li><li>以下几项仅在用到 DeepSeek 时出现：<ul><li><strong>DeepSeek API 密钥</strong>：填入你的 Key（仅存于本机钥匙串，绝不上传）。</li><li><strong>模型</strong>：留空用默认模型即可。</li><li><strong>测试连接</strong>：填好 Key 后点一下，验证是否能连通（成功显示绿勾，失败显示红叉和原因）。</li><li><strong>高级 → Base URL</strong>：默认连 DeepSeek，也可改成任意 OpenAI 兼容服务。</li><li><strong>DeepSeek 数据授权</strong>：显示「已授权 / 未授权」，并可<strong>撤销</strong>。</li></ul></li><li><strong>隐私政策</strong>：查看完整隐私说明。</li></ul>
+<h2 id="s4">AI 助手能做什么</h2>
+<p>从 <strong>⋯ 菜单 → AI 助手</strong> 打开后，会看到一份针对<strong>当前这篇笔记</strong>的功能列表：</p>
+<ul><li><strong>总结本笔记</strong> —— 提炼要点与核心信息。</li><li><strong>课堂纪要</strong> —— 从录音一键生成结构化纪要（仅当笔记带录音时出现，详见<a href="05-audio-lecture.html">第 5 章</a>）。</li><li><strong>问答 Ask AI</strong> —— 就这则笔记内容提问。</li><li><strong>数学求解</strong> —— 识别算式并分步求解。</li><li><strong>生成抽认卡</strong> —— 从笔记生成记忆卡片。</li><li><strong>从康奈尔笔记生成抽认卡</strong> —— 把线索作为问题、笔记作为答案（仅当笔记用了康奈尔模板时出现）。</li><li><strong>生成测验</strong> —— 从笔记生成测验题。</li><li><strong>文本润色</strong> —— 修语法 / 改写 / 精简。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：如果列表提示「AI 助手未配置」，说明你选了 DeepSeek 引擎但还没填 Key。去 <strong>设置 → AI 助手</strong> 填入 DeepSeek API Key，或把引擎改成<strong>端上模型</strong>即可。</p></blockquote>
+<h3>总结本笔记</h3>
+<p>一键把整篇笔记提炼成要点。总结结果可以复制，也可以<strong>存为笔记</strong>单独保存。</p>
+<h3>问答 Ask AI</h3>
+<p>就这篇笔记的内容向 AI 提问，例如「这则笔记的重点是什么？」。回答是逐字流式显示的。如果这篇笔记和其他笔记有关联，顶部还能切换<strong>提问范围</strong>：本篇 / 整本笔记本 / 链接笔记。</p>
+<h3>数学求解</h3>
+<p><strong>数学求解</strong>有两种模式（顶部切换）：</p>
+<ul><li><strong>求解</strong> —— 你输入算式或题目，AI <strong>分步</strong>给出解答。</li><li><strong>检查步骤</strong> —— 你把<strong>自己的解题步骤</strong>填进「你的解题步骤」框，AI 帮你<strong>检查对错</strong>并给出「检查结果」。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：考前自测时，用「检查步骤」把你的解法贴进去，就能知道哪一步错了，比只看标准答案更有用。</p></blockquote>
+<h3>生成抽认卡</h3>
+<p>从笔记自动生成一组记忆卡片：用「数量」调整卡片数，点「<strong>从笔记生成</strong>」，预览满意后「保存」。如果你的笔记用了<strong>康奈尔模板</strong>，还能用「<strong>从康奈尔笔记生成抽认卡</strong>」，自动把左栏线索当问题、右栏笔记当答案。</p>
+<p>生成后点「<strong>开始复习</strong>」进入复习。抽认卡怎么复习、间隔重复怎么安排，见<strong>第 7 章「抽认卡与复习」</strong>。</p>
+<h3>生成测验</h3>
+<p>从笔记生成一份测验，题型包括<strong>判断题</strong>、<strong>填空题</strong>和<strong>单选题</strong>。用「题目数」调整数量后生成，边答边显示对错，答完给出总得分。</p>
+<h3>文本润色</h3>
+<p>把一段文字交给 AI 改写，提供 <strong>6 种风格</strong>：</p>
+<ul><li><strong>修正语法</strong></li><li><strong>润色</strong></li><li><strong>精简</strong></li><li><strong>扩写</strong></li><li><strong>更正式</strong></li><li><strong>更口语</strong></li></ul>
+<p>选好风格点「处理」，结果可以复制，也可以「<strong>替换原文</strong>」直接回填。</p>
+<h2 id="s5">套索选中笔迹 → 交给 AI</h2>
+<p>在画布上用<strong>套索</strong>圈选一段手写笔迹后，浮出的操作里有一个「<strong>AI</strong>」菜单，可以把选中的这几笔直接送进 AI：</p>
+<ul><li><strong>复制为文本</strong> —— 识别成文字并复制到剪贴板（不进 AI 面板）。</li><li><strong>生成抽认卡</strong> —— 用这段内容生成卡片。</li><li><strong>数学求解</strong> —— 把圈选的算式送去求解。</li><li><strong>文本润色</strong> —— 润色这段文字。</li></ul>
+<p>也就是说，你不必先整理成正文，随手圈一段板书就能让 AI 处理。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：如果所选笔迹里没识别到文字，会提示「未从所选笔迹中识别到文字」——换个更清楚的手写区域再试。（把笔迹<strong>转为可编辑文本框</strong>的「转为文本」是套索的另一项功能，见画布章节。）</p></blockquote>
+<h2 id="s6">快捷指令与 Siri</h2>
+<p>Inkelle 把常用操作做成了<strong>快捷指令</strong>（App Intents），你可以在系统「快捷指令」App、Siri 或聚焦搜索里直接触发：</p>
+<ul><li><strong>新建笔记</strong></li><li><strong>搜索笔记</strong></li><li><strong>总结笔记</strong> —— 用 AI 总结选定的笔记并打开总结面板。</li><li><strong>生成抽认卡</strong> —— 用 AI 把选定的笔记变成一组抽认卡。</li><li><strong>复习到期卡片</strong> —— 开始复习今天到期的记忆卡片。</li><li><strong>开始录课</strong> —— 新建一篇笔记并立即开始录音，边听边记。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：「总结笔记」「生成抽认卡」这类需要 AI 的快捷指令，同样遵守隐私规则——上锁的笔记（或上锁笔记本里的笔记）不会暴露给快捷指令和 Siri。若 AI 还没开启，会提示你先去设置里启用。</p></blockquote>
+<h2 id="s7">笔记本学习指南（跨笔记）</h2>
+<p>如果你想复习<strong>一整本笔记本</strong>，而不是单篇笔记，可以在<strong>笔记本详情页</strong>的菜单里点「<strong>生成学习指南</strong>」。</p>
+<p>Inkelle 会综合这本笔记本里所有可识别文字的笔记，一次生成两样东西：</p>
+<ul><li>一份结构化的<strong>大纲与关键概念</strong>。</li><li>一副可复习的<strong>抽认卡</strong>。</li></ul>
+<p>保存后，大纲会作为一篇 Markdown 笔记存进这本笔记本，卡片会自动进入复习流程（见<strong>第 7 章「抽认卡与复习」</strong>）。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：学习指南同样受引擎和授权规则约束——用 DeepSeek 时首次会请你确认授权，用端上模型则数据不出设备。</p></blockquote>
+      <nav class="pager" aria-label="章节导航">
+        <a class="prev" href="05-audio-lecture.html"><span class="dir">← 上一章</span><span class="ttl">录音与课堂</span></a>
+        <a class="next" href="07-study-system.html"><span class="dir">下一章 →</span><span class="ttl">学习系统</span></a>
+      </nav>
+    </article>
+    <aside class="toc" aria-label="本页目录">
+      <p class="toc-title">本页目录</p>
+      <ol><li><a href="#s1">两种 AI 引擎</a></li><li><a href="#s2">隐私与授权</a></li><li><a href="#s3">设置里的 AI 区</a></li><li><a href="#s4">AI 助手能做什么</a></li><li><a href="#s5">套索选中笔迹 → 交给 AI</a></li><li><a href="#s6">快捷指令与 Siri</a></li><li><a href="#s7">笔记本学习指南（跨笔记）</a></li></ol>
+    </aside>
+</div>
+<footer>
+  <div class="wrap foot-inner">
+    <span class="brand"><img src="../assets/app-icon.png" alt="" width="28" height="28" /><span class="serif">Inkelle <span style="color:var(--muted); font-weight:400;">墨笺</span></span></span>
+    <div class="foot-links">
+      <a href="index.html">使用指南</a>
+      <a href="../privacy.html">隐私政策</a>
+      <a href="../terms.html">使用条款</a>
+      <a href="mailto:gin.linhan@gmail.com">联系我们</a>
+      <a href="https://apps.apple.com/app/id6774624375">在 App Store 下载</a>
+    </div>
+    <p class="copyright">© 2026 Inkelle · Han Lin</p>
+  </div>
+</footer>
+</body>
+</html>

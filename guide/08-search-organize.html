@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>搜索与整理 — Inkelle 使用指南</title>
+<meta name="description" content="全文与手写搜索、文档内查找、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
+<link rel="icon" type="image/png" href="../assets/app-icon.png" />
+<meta property="og:title" content="搜索与整理 — Inkelle 使用指南" />
+<meta property="og:description" content="全文与手写搜索、文档内查找、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://inkelle.pages.dev/assets/screenshot-1.png" />
+<style>
+  :root {
+    --ink: #1f1912;
+    --ink-soft: #4a4234;
+    --muted: #6b6151;
+    --rule: #e7ddc8;
+    --bg: #fdf8f0;
+    --surface: #ffffff;
+    --paper: #faf3e3;
+    --accent: #3b78c4;
+    --accent-ink: #2c5fa3;
+    --r-btn: 12px;
+    --r-card: 16px;
+    --r-device: 24px;
+    --shadow-tint: 31, 25, 18;
+    --code-bg: #f1e9d8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #f0e8d8;
+      --ink-soft: #cfc5b0;
+      --muted: #9a8f7a;
+      --rule: #322b20;
+      --bg: #161209;
+      --surface: #1f1a10;
+      --paper: #241e12;
+      --accent: #6aa1dd;
+      --accent-ink: #8db8e8;
+      --shadow-tint: 0, 0, 0;
+      --code-bg: #2a2416;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.7; font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Songti SC", "Noto Serif SC", Georgia, "Times New Roman", serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { display: block; max-width: 100%; height: auto; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- nav (shared with index.html) ---- */
+  .nav {
+    position: sticky; top: 0; z-index: 10; height: 64px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; gap: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; font-size: 19px; }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; font-size: 15px; }
+  .nav-links a { color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav .btn { margin-left: 4px; }
+  @media (max-width: 760px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--ink); color: var(--bg);
+    border-radius: var(--r-btn); padding: 12px 22px;
+    font-size: 16px; font-weight: 600; letter-spacing: .01em;
+    transition: transform .18s cubic-bezier(.16,1,.3,1), background .18s;
+  }
+  .btn:hover { transform: translateY(-1px); text-decoration: none; }
+  .btn:active { transform: scale(.98); }
+  .btn svg { width: 18px; height: 18px; fill: currentColor; }
+  .btn.small { padding: 8px 16px; font-size: 14px; }
+
+  /* ---- breadcrumb ---- */
+  .crumb { font-size: 14.5px; color: var(--muted); padding: 26px 0 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .crumb a { color: var(--ink-soft); }
+  .crumb a:hover { color: var(--ink); }
+  .crumb .sep { color: var(--rule); }
+
+  /* ---- guide layout: article + sticky TOC ---- */
+  .guide-layout {
+    max-width: 1080px; margin: 0 auto; padding: 8px 24px 24px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 56px; align-items: start;
+  }
+  .toc { position: sticky; top: 88px; font-size: 14.5px; }
+  .toc-title { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .toc li { margin: 0; }
+  .toc a { display: block; color: var(--ink-soft); padding: 5px 0 5px 14px; margin-left: -1px; border-left: 2px solid transparent; line-height: 1.45; }
+  .toc a:hover { color: var(--ink); border-left-color: var(--accent); text-decoration: none; }
+  @media (max-width: 900px) { .guide-layout { grid-template-columns: 1fr; gap: 0; } .toc { display: none; } }
+
+  /* ---- article typography ---- */
+  article { min-width: 0; }
+  article h1 { font-size: clamp(30px, 4.4vw, 42px); line-height: 1.25; font-weight: 700; margin: 18px 0 8px; letter-spacing: .01em; }
+  .lede { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  article h2 { font-size: clamp(22px, 2.8vw, 28px); line-height: 1.35; font-weight: 700; margin: 52px 0 14px; padding-top: 8px; scroll-margin-top: 84px; }
+  article h2:first-of-type { margin-top: 32px; }
+  article h3 { font-size: 19px; font-weight: 650; margin: 32px 0 10px; scroll-margin-top: 84px; }
+  article p { margin: 0 0 16px; color: var(--ink); }
+  article ul, article ol { margin: 0 0 16px; padding-left: 26px; }
+  article li { margin: 6px 0; }
+  article li > ul, article li > ol { margin: 6px 0 4px; }
+  article strong { font-weight: 650; }
+  article a { color: var(--accent); font-weight: 500; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--code-bg); padding: 1.5px 6px; border-radius: 5px; font-size: .88em;
+  }
+  article hr { border: none; border-top: 1px solid var(--rule); margin: 44px 0; }
+
+  /* ---- tip / blockquote ---- */
+  blockquote.tip {
+    margin: 22px 0; padding: 14px 18px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    border-radius: var(--r-btn); color: var(--ink-soft); font-size: 15.5px;
+  }
+  blockquote.tip p { margin: 0 0 8px; }
+  blockquote.tip p:last-child { margin: 0; }
+  blockquote.tip strong { color: var(--ink); }
+
+  /* ---- tables ---- */
+  .table-scroll { overflow-x: auto; margin: 20px 0; border: 1px solid var(--rule); border-radius: var(--r-card); }
+  article table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  article th, article td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  article thead th { background: var(--paper); font-weight: 650; color: var(--ink); white-space: nowrap; }
+  article tbody tr:last-child td { border-bottom: none; }
+  article td code { white-space: nowrap; }
+
+  /* ---- prev / next ---- */
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 56px 0 8px; }
+  .pager a, .pager span {
+    display: flex; flex-direction: column; gap: 4px;
+    border: 1px solid var(--rule); border-radius: var(--r-card); padding: 16px 20px;
+    background: var(--surface); transition: transform .18s cubic-bezier(.16,1,.3,1), border-color .18s;
+  }
+  .pager a:hover { transform: translateY(-2px); border-color: var(--muted); text-decoration: none; }
+  .pager .dir { font-size: 13px; color: var(--muted); }
+  .pager .ttl { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .pager .next { text-align: right; }
+  .pager span { opacity: .45; }
+  @media (max-width: 560px) { .pager { grid-template-columns: 1fr; } .pager .next { text-align: left; } }
+
+  /* ---- guide index (TOC hub) ---- */
+  .guide-hero { padding: 44px 0 8px; max-width: 720px; }
+  .badge {
+    display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .02em;
+    color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--rule));
+    border-radius: 999px; padding: 4px 14px; margin-bottom: 20px;
+  }
+  .guide-hero h1 { font-size: clamp(34px, 4.6vw, 50px); line-height: 1.2; font-weight: 700; margin: 0 0 16px; }
+  .guide-hero p { font-size: 18px; color: var(--ink-soft); margin: 0; }
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 40px 0 8px; }
+  .gcard {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card);
+    padding: 22px; transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
+  }
+  .gcard:hover { transform: translateY(-3px); box-shadow: 0 14px 38px rgba(var(--shadow-tint), .10); text-decoration: none; }
+  .gcard .num {
+    flex: none; width: 38px; height: 38px; border-radius: 10px;
+    background: var(--paper); border: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: var(--accent-ink);
+  }
+  .gcard h3 { margin: 2px 0 6px; font-size: 18px; font-weight: 650; color: var(--ink); }
+  .gcard p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  @media (max-width: 720px) { .card-grid { grid-template-columns: 1fr; } }
+
+  .conventions { max-width: 760px; margin: 64px 0 8px; }
+  .conventions h2 { font-size: 24px; font-weight: 700; margin: 0 0 14px; }
+  .conventions ul { padding-left: 22px; color: var(--ink-soft); }
+  .conventions li { margin: 8px 0; }
+  .conventions strong { color: var(--ink); }
+
+  /* ---- footer (shared with index.html) ---- */
+  footer { border-top: 1px solid var(--rule); padding: 40px 0 56px; margin-top: 40px; }
+  .foot-inner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .foot-inner .brand { font-size: 17px; }
+  .foot-links { display: flex; gap: 20px; margin-left: auto; font-size: 14.5px; flex-wrap: wrap; }
+  .foot-links a { color: var(--ink-soft); }
+  .foot-links a:hover { color: var(--ink); }
+  .copyright { width: 100%; color: var(--muted); font-size: 13.5px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="../assets/app-icon.png" alt="Inkelle 图标" width="28" height="28" /><span class="serif">Inkelle</span></a>
+    <div class="nav-links">
+      <a href="../index.html">官网首页</a>
+      <a href="index.html">使用指南</a>
+      <a href="../index.html#faq">常见问题</a>
+    </div>
+    <a class="btn small" href="https://apps.apple.com/app/id6774624375"><svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>在 App Store 下载</a>
+  </div>
+</nav>
+<div class="crumb wrap">
+  <a href="../index.html">官网首页</a><span class="sep">/</span>
+  <a href="index.html">使用指南</a><span class="sep">/</span>
+  <span>第 08 章</span>
+</div>
+<div class="guide-layout">
+    <article>
+      <p class="lede">Inkelle 使用指南 · 第 08 章 · 对应 App v1.6</p>
+      <h1 class="serif">搜索与整理</h1>
+<p>笔记越写越多，找得到、理得清才用得顺手。这一章讲怎么在整个资料库里搜到想要的内容，怎么用标签、智能文件夹、文件夹层级把笔记归置好，以及锁定、外观、回收站这些整理相关的功能。</p>
+<h2 id="s1">全库搜索</h2>
+<p>侧边栏顶部有一个搜索框，占位文字是「搜索笔记本和笔记内容」。在这里输入关键词，会同时搜三类内容：</p>
+<ul><li><strong>笔记本标题</strong></li><li><strong>笔记标题</strong></li><li><strong>笔记里的文字</strong>——包括手写识别（OCR）出的文字、导入 PDF 的文本层、以及录音的转写文字</li></ul>
+<p>搜索结果每一条右侧都带一个<strong>来源徽标</strong>，告诉你是哪儿命中的：</p>
+<div class="table-scroll"><table><thead><tr><th>徽标</th><th>含义</th></tr></thead><tbody><tr><td>标题</td><td>命中的是笔记标题</td></tr><tr><td>手写</td><td>命中的是手写识别出来的文字</td></tr><tr><td>PDF</td><td>命中的是导入 PDF 里的文字</td></tr><tr><td>录音</td><td>命中的是录音转写的文字</td></tr></tbody></table></div>
+<p>命中手写、PDF 或录音时，结果下方还会显示一段高亮的摘录，让你先扫一眼上下文再决定要不要点开。点开一条结果，会直接跳到<strong>第一处命中的那一页</strong>；如果只是标题命中，则从第 1 页打开。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：手写搜索依赖后台的文字识别。刚写完的笔记可能要等几秒识别完成才能被搜到；如果一直搜不到旧笔记里的手写内容，可以到「设置 › 数据管理 › 重建手写索引」重新扫一遍（见第 9 章）。</p></blockquote>
+<blockquote class="tip"><p><strong>小提示</strong>：iPad 上按 <strong>Cmd+F</strong>（外接键盘）可以直接把光标定位到侧边栏搜索框。iPhone 上则有独立的「搜索」标签页。</p></blockquote>
+<h2 id="s2">笔记本内搜索</h2>
+<p>打开一个笔记本后，右上角的放大镜按钮会展开一个搜索框（占位文字是「在〈笔记本名〉中搜索」）。这个搜索<strong>只匹配笔记标题</strong>，用来在一本笔记里快速定位某一篇，不会搜正文或手写内容。要搜内容，请用上面的全库搜索。</p>
+<h2 id="s3">在本文档中查找</h2>
+<p>在画布里翻某一篇长笔记时，想定位到写了某个词的那一页，用「在本文档中查找」：</p>
+<ol><li>打开笔记，从画布右上角 <strong>⋯ 菜单</strong>（更多选项）里进入文档内查找。</li><li>输入关键词，Inkelle 会逐页比对每一页的识别文字，并显示匹配总数。</li><li>用「上一个匹配」「下一个匹配」在命中页之间跳转，到头会自动绕回。</li></ol>
+<h2 id="s4">标签</h2>
+<p>标签是跨笔记本的横向分类。给不同笔记本里的笔记打上同一个标签（比如「期中」「实验报告」），就能一次性把它们聚到一起。</p>
+<h3>新建与指派标签</h3>
+<ol><li>长按一张笔记卡片，在弹出菜单里选「<strong>管理标签</strong>」。</li><li>在底部输入框里填标签名称，选一个颜色，点加号即可新建，并会直接指派给当前这篇笔记。</li><li>已有的标签会以彩色 chip 列出，点一下 chip 就能给当前笔记<strong>指派或取消指派</strong>（选中的带对勾）。</li></ol>
+<h3>管理已有标签</h3>
+<p>在「管理标签」面板里长按某个标签 chip，会弹出管理菜单：</p>
+<ul><li><strong>重命名</strong>——改标签名字。</li><li><strong>更改颜色</strong>——从 8 种颜色里重新选。</li><li><strong>合并到…</strong>——把这个标签下的所有笔记并到另一个标签，然后删除原标签。整理重复标签时很有用。</li><li><strong>删除标签</strong>——从所有笔记上移除这个标签（确认后不可撤销，但笔记本身不会被删）。</li></ul>
+<h3>按标签筛选</h3>
+<p>侧边栏有一条横向的标签筛选栏，最前面是「全部」，后面是正在使用中的标签。点一个标签就只看它下面的笔记，再点一次同一个标签取消筛选。<strong>一次只能选一个标签</strong>。</p>
+<h2 id="s5">智能文件夹</h2>
+<p>智能文件夹不是真的文件夹，而是一组「筛选条件」——笔记只要符合条件就会自动出现在里面，不用手动搬。它在侧边栏「智能文件夹」区。</p>
+<h3>内置智能文件夹</h3>
+<div class="table-scroll"><table><thead><tr><th>名称</th><th>收录范围</th></tr></thead><tbody><tr><td>全部笔记</td><td>所有笔记</td></tr><tr><td>有标签的笔记</td><td>至少打了一个标签的笔记</td></tr><tr><td>本周创建</td><td>最近 7 天内创建的笔记</td></tr><tr><td>收藏</td><td>标了收藏的笔记</td></tr></tbody></table></div>
+<p>每个都在侧边栏实时显示数量。</p>
+<h3>新建自定义智能文件夹</h3>
+<p>点「智能文件夹」区标题右侧的「<strong>+</strong>」，打开规则编辑器：</p>
+<ol><li>起一个名称，可选一个图标。</li><li>选<strong>组合方式</strong>：「满足全部」（所有条件都成立）或「满足任一」（成立一条即可）。</li><li>点「添加条件」，逐条设置。可加多条，左滑删除。至少一条条件、且填了名称才能保存。</li></ol>
+<p>可用的条件字段：</p>
+<div class="table-scroll"><table><thead><tr><th>条件字段</th><th>怎么填</th></tr></thead><tbody><tr><td>标签包含</td><td>从下拉里选一个标签</td></tr><tr><td>标题含关键词</td><td>输入关键词</td></tr><tr><td>正文含关键词</td><td>输入关键词（匹配标题、正文与识别文字）</td></tr><tr><td>创建时间</td><td>最近 N 天（1–365）</td></tr><tr><td>修改时间</td><td>最近 N 天</td></tr><tr><td>已收藏</td><td>是 / 否</td></tr><tr><td>含录音</td><td>是 / 否</td></tr><tr><td>是 PDF</td><td>是 / 否</td></tr><tr><td>含公式</td><td>是 / 否</td></tr><tr><td>所属笔记本</td><td>从下拉里选一个笔记本</td></tr></tbody></table></div>
+<p>建好的智能文件夹长按可「编辑」或「删除」。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：想要「本月错题本里带公式、还没掌握的题」这类组合视图？用「满足全部」，叠加「所属笔记本 = 错题本 + 含公式 = 是 + 修改时间 = 最近 30 天」就能拼出来。条件是活的，笔记一变动就自动进出。</p></blockquote>
+<h2 id="s6">文件夹层级</h2>
+<p>笔记本可以<strong>无限嵌套</strong>子笔记本，像文件夹一样组织。</p>
+<ul><li><strong>新建子笔记本</strong>：长按一个笔记本，选「新建子笔记本」。</li><li><strong>移动到…</strong>：长按笔记本选「移动到…」，从列表里挑目标笔记本（不会列出它自己和它的后代，避免套环）。</li><li><strong>移到顶层</strong>：如果笔记本当前有父级，菜单里会出现「移到顶层」，一步把它提到最外层。</li><li><strong>把笔记拖进笔记本</strong>：直接把一张笔记卡片拖到侧边栏的某个笔记本上，笔记就归到那本里。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：调整笔记本之间的父子层级要用「移动到…」菜单——目前不支持在侧边栏直接把一个笔记本拖到另一个笔记本上重组层级。</p></blockquote>
+<h2 id="s7">批量操作</h2>
+<p>在一本笔记本里要一次处理多篇笔记时：</p>
+<ol><li>打开笔记本，点右上角「<strong>选择</strong>」。</li><li>逐张点选笔记（卡片上出现勾选圈）。</li><li>底部操作栏有三个批量操作：<ul><li><strong>移动</strong>——把所选笔记一起移到另一个笔记本。</li><li><strong>导出</strong>——把每篇笔记各导出成一个 <code>.inkelle</code> 文件，一起走系统分享面板。</li><li><strong>删除</strong>——把所选笔记一起移到回收站（软删除，确认后执行）。</li></ul></li></ol>
+<blockquote class="tip"><p><strong>小提示</strong>：批量选择只在<strong>单个笔记本内</strong>可用，智能文件夹和搜索结果里没有。目前也没有「全选」，以及批量打标签/收藏/锁定。</p></blockquote>
+<h2 id="s8">锁定笔记本与笔记</h2>
+<p>对含隐私内容的笔记，可以用 Face ID / Touch ID 锁起来。<strong>笔记本和单篇笔记都能锁</strong>：</p>
+<ul><li>锁笔记本：长按侧边栏的笔记本，选「锁定」。</li><li>锁单篇笔记：长按笔记卡片，选「锁定」。</li></ul>
+<p>锁定后：</p>
+<ul><li>打开被锁的笔记本或笔记，都需要先通过 Face ID / Touch ID 验证（设备没有生物识别时会回退到设备密码）。</li><li><strong>解锁或移除锁本身也要先验证</strong>，别人拿到设备也去不掉锁。</li><li>被锁的项目在卡片和列表里只显示一个锁的占位图，不露缩略图。</li><li><strong>在搜索和系统 Spotlight 里，被锁的项目只按标题匹配</strong>，其手写内容、录音转写都不会被搜到，隐私内容不外泄。</li></ul>
+<h2 id="s9">笔记本外观</h2>
+<p>给笔记本换个封面颜色、封面图或图标，一眼就能认出。长按侧边栏的笔记本，菜单里有「<strong>图标</strong>」和「<strong>封面</strong>」两个入口，都会打开外观设置面板，可改三样：</p>
+<ul><li><strong>封面图</strong>——点「选择照片」从相册挑一张图当封面，也可以「移除封面图」。</li><li><strong>颜色</strong>——从预设色环里选一个书脊/封面颜色。</li><li><strong>图标</strong>——从图标网格里选一个 SF Symbol，或选「无图标」。</li></ul>
+<p>此外，打开笔记本后右上角「⋯」里的「笔记本设置」，可以改这本笔记的<strong>默认页模板</strong>和<strong>封面颜色</strong>（这里不含图标和封面图）。</p>
+<h2 id="s10">排序、视图与收藏</h2>
+<p>打开笔记本后，工具条上：</p>
+<ul><li><strong>排序</strong>：左侧下拉菜单，可选「最近修改」「名称」「创建时间」。</li><li><strong>网格 / 列表</strong>：右上角按钮切换两种视图，选择会在全 App（含智能文件夹）记住。</li><li><strong>只看收藏</strong>：工具条上的星形按钮，只显示收藏的笔记。</li></ul>
+<p><strong>收藏</strong>一篇笔记：长按笔记卡片，选「收藏」（再长按可「取消收藏」）。</p>
+<p>侧边栏还有一个「<strong>最近打开</strong>」区，按你最近打开的顺序列出最多 10 篇笔记，方便接着上次继续（仅在没有搜索时显示）。</p>
+<h2 id="s11">回收站</h2>
+<p>删除的笔记本和笔记不会立刻消失，而是先进「回收站」（侧边栏底部）。</p>
+<ul><li><strong>保留 30 天</strong>：删除项保留 30 天，过期后自动清除。</li><li><strong>分区</strong>：回收站分「笔记本」和「笔记」两段；删掉的笔记本里的笔记不会重复列出。</li><li><strong>删除时间</strong>：每项显示「今天删除」或「N 天前删除」。</li><li><strong>恢复</strong>：点某项的「恢复」，笔记 / 笔记本（连同其中所有笔记）都会回到原位。</li><li><strong>永久删除</strong>：点「永久删除」彻底删掉某项（删笔记本会二次确认）。</li><li><strong>清空回收站</strong>：顶部「清空回收站」按钮，确认后永久删除回收站里的全部内容。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：永久删除和清空回收站都<strong>无法恢复</strong>，动手前确认一下。删错了但还没永久删除的，30 天内都能从回收站找回来。</p></blockquote>
+      <nav class="pager" aria-label="章节导航">
+        <a class="prev" href="07-study-system.html"><span class="dir">← 上一章</span><span class="ttl">学习系统</span></a>
+        <a class="next" href="09-sync-backup-export.html"><span class="dir">下一章 →</span><span class="ttl">同步 · 备份 · 导入导出</span></a>
+      </nav>
+    </article>
+    <aside class="toc" aria-label="本页目录">
+      <p class="toc-title">本页目录</p>
+      <ol><li><a href="#s1">全库搜索</a></li><li><a href="#s2">笔记本内搜索</a></li><li><a href="#s3">在本文档中查找</a></li><li><a href="#s4">标签</a></li><li><a href="#s5">智能文件夹</a></li><li><a href="#s6">文件夹层级</a></li><li><a href="#s7">批量操作</a></li><li><a href="#s8">锁定笔记本与笔记</a></li><li><a href="#s9">笔记本外观</a></li><li><a href="#s10">排序、视图与收藏</a></li><li><a href="#s11">回收站</a></li></ol>
+    </aside>
+</div>
+<footer>
+  <div class="wrap foot-inner">
+    <span class="brand"><img src="../assets/app-icon.png" alt="" width="28" height="28" /><span class="serif">Inkelle <span style="color:var(--muted); font-weight:400;">墨笺</span></span></span>
+    <div class="foot-links">
+      <a href="index.html">使用指南</a>
+      <a href="../privacy.html">隐私政策</a>
+      <a href="../terms.html">使用条款</a>
+      <a href="mailto:gin.linhan@gmail.com">联系我们</a>
+      <a href="https://apps.apple.com/app/id6774624375">在 App Store 下载</a>
+    </div>
+    <p class="copyright">© 2026 Inkelle · Han Lin</p>
+  </div>
+</footer>
+</body>
+</html>
