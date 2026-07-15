@@ -1,0 +1,74 @@
+# 自动同步使用指南：从私有 Inkelle 仓库拉取 docs/user-guide 的 Markdown，
+# 用 tools/build_guide.py 重新生成 guide/*.html，有变更才提交，并部署到
+# Cloudflare Pages（inkelle.pages.dev）。GitHub Pages 镜像随提交自动重建。
+#
+# 触发方式：
+#   - 定时：每 6 小时拉取一次（App 仓库私有，site 侧无法用 push 触发）
+#   - 手动：gh workflow run sync-guide.yml --repo VoldemortGin/inkelle-site
+#   - repository_dispatch (type: guide-updated)：预留即时通道——若以后在
+#     Inkelle 仓库配一个 fine-grained PAT（仅 inkelle-site contents:write），
+#     加一个 push-paths 触发的 curl dispatch 即可秒级同步。
+#
+# 所需 secrets（均已配置）：
+#   INKELLE_READ_KEY       只读 deploy key（私钥），对应 Inkelle 仓库的公钥
+#   CLOUDFLARE_API_TOKEN   Pages 部署 token
+#   CLOUDFLARE_ACCOUNT_ID  f39a…be9f
+name: sync-guide
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [guide-updated]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-guide
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+
+      - name: Checkout Inkelle (guide source, read-only)
+        uses: actions/checkout@v4
+        with:
+          repository: VoldemortGin/Inkelle
+          ssh-key: ${{ secrets.INKELLE_READ_KEY }}
+          path: .inkelle-src
+          sparse-checkout: docs/user-guide
+
+      - name: Rebuild guide pages
+        run: python3 tools/build_guide.py .inkelle-src/docs/user-guide
+
+      - name: Commit if changed
+        id: commit
+        run: |
+          rm -rf .inkelle-src
+          # status --porcelain also catches NEW chapter files (untracked),
+          # which `git diff --quiet` would miss.
+          if [ -z "$(git status --porcelain guide/)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "guide is up to date"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add guide/
+            git commit -m "chore: sync user guide from Inkelle/docs/user-guide"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=inkelle --branch=main --commit-dirty=true
