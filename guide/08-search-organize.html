@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>搜索与整理 — Inkelle 使用指南</title>
-<meta name="description" content="全文与手写搜索、文档内查找、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
+<meta name="description" content="全文与手写搜索、文档内查找（命中高亮）、笔记链接与未链接提及、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
 <link rel="icon" type="image/png" href="../assets/app-icon.png" />
 <meta property="og:title" content="搜索与整理 — Inkelle 使用指南" />
-<meta property="og:description" content="全文与手写搜索、文档内查找、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
+<meta property="og:description" content="全文与手写搜索、文档内查找（命中高亮）、笔记链接与未链接提及、标签、智能文件夹、文件夹层级、批量操作、锁定笔记本、笔记本外观" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="https://inkelle.pages.dev/assets/screenshot-1.png" />
 <style>
@@ -235,8 +235,11 @@
 <p>打开一个笔记本后，右上角的放大镜按钮会展开一个搜索框（占位文字是「在〈笔记本名〉中搜索」）。这个搜索<strong>只匹配笔记标题</strong>，用来在一本笔记里快速定位某一篇，不会搜正文或手写内容。要搜内容，请用上面的全库搜索。</p>
 <h2 id="s3">在本文档中查找</h2>
 <p>在画布里翻某一篇长笔记时，想定位到写了某个词的那一页，用「在本文档中查找」：</p>
-<ol><li>打开笔记，从画布右上角 <strong>⋯ 菜单</strong>（更多选项）里进入文档内查找。</li><li>输入关键词，Inkelle 会逐页比对每一页的识别文字，并显示匹配总数。</li><li>用「上一个匹配」「下一个匹配」在命中页之间跳转，到头会自动绕回。</li></ol>
-<h2 id="s4">标签</h2>
+<ol><li>打开笔记，从画布右上角 <strong>⋯ 菜单</strong>（更多选项）里进入文档内查找。</li><li>输入关键词，Inkelle 会逐页比对每一页的识别文字，并显示匹配总数。</li><li>用「上一个匹配」「下一个匹配」在命中页之间跳转，到头会自动绕回。</li><li>跳到命中页后，页面上会用半透明的强调色块盖住匹配的手写文字行，约 3 秒后自动淡出；再跳到下一处会重新亮起。</li></ol>
+<blockquote class="tip"><p><strong>小提示</strong>：这个高亮依赖手写识别索引：旧笔记里的页面需要先被后台重新识别一次（可用「设置 › 数据管理 › 重建手写索引」），没有高亮时页面只是正常跳转。导入的 PDF 走文本层：有文本层的 PDF 会高亮命中文字，扫描版 PDF 只跳页。</p></blockquote>
+<h2 id="s4">笔记链接与未链接提及</h2>
+<p>在画布右上角 <strong>⋯ 菜单</strong>里打开「笔记链接」，可以看到这篇笔记的「已链接笔记」和「反向链接」，并用「添加链接」连到别的笔记。面板里还有一栏「<strong>未链接提及</strong>」：Inkelle 会扫描本篇笔记的标题、文字和手写识别文字，找出提到了其他笔记标题、却还没建立链接的地方，列出上下文片段，点右侧的「链接」即可一键建立链接。已锁定或在回收站里的笔记不参与，系统自动起的默认标题（如「笔记 3」）也不会被当作提及。面板里各条链接的来源标注与「复习这个概念的邻域」见<a href="04-insert-content.html">《插入内容》</a>和<a href="07-study-system.html">《学习系统》</a>。</p>
+<h2 id="s5">标签</h2>
 <p>标签是跨笔记本的横向分类。给不同笔记本里的笔记打上同一个标签（比如「期中」「实验报告」），就能一次性把它们聚到一起。</p>
 <h3>新建与指派标签</h3>
 <ol><li>长按一张笔记卡片，在弹出菜单里选「<strong>管理标签</strong>」。</li><li>在底部输入框里填标签名称，选一个颜色，点加号即可新建，并会直接指派给当前这篇笔记。</li><li>已有的标签会以彩色 chip 列出，点一下 chip 就能给当前笔记<strong>指派或取消指派</strong>（选中的带对勾）。</li></ol>
@@ -245,7 +248,7 @@
 <ul><li><strong>重命名</strong>——改标签名字。</li><li><strong>更改颜色</strong>——从 8 种颜色里重新选。</li><li><strong>合并到…</strong>——把这个标签下的所有笔记并到另一个标签，然后删除原标签。整理重复标签时很有用。</li><li><strong>删除标签</strong>——从所有笔记上移除这个标签（确认后不可撤销，但笔记本身不会被删）。</li></ul>
 <h3>按标签筛选</h3>
 <p>侧边栏有一条横向的标签筛选栏，最前面是「全部」，后面是正在使用中的标签。点一个标签就只看它下面的笔记，再点一次同一个标签取消筛选。<strong>一次只能选一个标签</strong>。</p>
-<h2 id="s5">智能文件夹</h2>
+<h2 id="s6">智能文件夹</h2>
 <p>智能文件夹不是真的文件夹，而是一组「筛选条件」——笔记只要符合条件就会自动出现在里面，不用手动搬。它在侧边栏「智能文件夹」区。</p>
 <h3>内置智能文件夹</h3>
 <div class="table-scroll"><table><thead><tr><th>名称</th><th>收录范围</th></tr></thead><tbody><tr><td>全部笔记</td><td>所有笔记</td></tr><tr><td>有标签的笔记</td><td>至少打了一个标签的笔记</td></tr><tr><td>本周创建</td><td>最近 7 天内创建的笔记</td></tr><tr><td>收藏</td><td>标了收藏的笔记</td></tr></tbody></table></div>
@@ -254,32 +257,32 @@
 <p>点「智能文件夹」区标题右侧的「<strong>+</strong>」，打开规则编辑器：</p>
 <ol><li>起一个名称，可选一个图标。</li><li>选<strong>组合方式</strong>：「满足全部」（所有条件都成立）或「满足任一」（成立一条即可）。</li><li>点「添加条件」，逐条设置。可加多条，左滑删除。至少一条条件、且填了名称才能保存。</li></ol>
 <p>可用的条件字段：</p>
-<div class="table-scroll"><table><thead><tr><th>条件字段</th><th>怎么填</th></tr></thead><tbody><tr><td>标签包含</td><td>从下拉里选一个标签</td></tr><tr><td>标题含关键词</td><td>输入关键词</td></tr><tr><td>正文含关键词</td><td>输入关键词（匹配标题、正文与识别文字）</td></tr><tr><td>创建时间</td><td>最近 N 天（1–365）</td></tr><tr><td>修改时间</td><td>最近 N 天</td></tr><tr><td>已收藏</td><td>是 / 否</td></tr><tr><td>含录音</td><td>是 / 否</td></tr><tr><td>是 PDF</td><td>是 / 否</td></tr><tr><td>含公式</td><td>是 / 否</td></tr><tr><td>所属笔记本</td><td>从下拉里选一个笔记本</td></tr></tbody></table></div>
+<div class="table-scroll"><table><thead><tr><th>条件字段</th><th>怎么填</th></tr></thead><tbody><tr><td>标签包含</td><td>从下拉里选一个标签</td></tr><tr><td>标题含关键词</td><td>输入关键词</td></tr><tr><td>正文含关键词</td><td>输入关键词（匹配标题、正文与识别文字）</td></tr><tr><td>创建时间</td><td>最近 N 天（1–365）</td></tr><tr><td>修改时间</td><td>最近 N 天</td></tr><tr><td>已收藏</td><td>是 / 否</td></tr><tr><td>含录音</td><td>是 / 否</td></tr><tr><td>是 PDF</td><td>是 / 否</td></tr><tr><td>含公式</td><td>是 / 否</td></tr><tr><td>所属笔记本</td><td>从下拉里选一个笔记本</td></tr><tr><td>链接数</td><td>先选比较方式「不少于」「不多于」或「等于」，再填篇数；统计与这篇笔记双向关联、去重后的笔记数，画布上的链接 chip 也算</td></tr><tr><td>孤立笔记（无链接）</td><td>是 / 否；「是」即没有任何链接的笔记</td></tr></tbody></table></div>
 <p>建好的智能文件夹长按可「编辑」或「删除」。</p>
 <blockquote class="tip"><p><strong>小提示</strong>：想要「本月错题本里带公式、还没掌握的题」这类组合视图？用「满足全部」，叠加「所属笔记本 = 错题本 + 含公式 = 是 + 修改时间 = 最近 30 天」就能拼出来。条件是活的，笔记一变动就自动进出。</p></blockquote>
-<h2 id="s6">文件夹层级</h2>
+<h2 id="s7">文件夹层级</h2>
 <p>笔记本可以<strong>无限嵌套</strong>子笔记本，像文件夹一样组织。</p>
 <ul><li><strong>新建子笔记本</strong>：长按一个笔记本，选「新建子笔记本」。</li><li><strong>移动到…</strong>：长按笔记本选「移动到…」，从列表里挑目标笔记本（不会列出它自己和它的后代，避免套环）。</li><li><strong>移到顶层</strong>：如果笔记本当前有父级，菜单里会出现「移到顶层」，一步把它提到最外层。</li><li><strong>把笔记拖进笔记本</strong>：直接把一张笔记卡片拖到侧边栏的某个笔记本上，笔记就归到那本里。</li></ul>
 <blockquote class="tip"><p><strong>小提示</strong>：调整笔记本之间的父子层级要用「移动到…」菜单——目前不支持在侧边栏直接把一个笔记本拖到另一个笔记本上重组层级。</p></blockquote>
-<h2 id="s7">批量操作</h2>
+<h2 id="s8">批量操作</h2>
 <p>在一本笔记本里要一次处理多篇笔记时：</p>
 <ol><li>打开笔记本，点右上角「<strong>选择</strong>」。</li><li>逐张点选笔记（卡片上出现勾选圈）。</li><li>底部操作栏有三个批量操作：<ul><li><strong>移动</strong>——把所选笔记一起移到另一个笔记本。</li><li><strong>导出</strong>——把每篇笔记各导出成一个 <code>.inkelle</code> 文件，一起走系统分享面板。</li><li><strong>删除</strong>——把所选笔记一起移到回收站（软删除，确认后执行）。</li></ul></li></ol>
 <blockquote class="tip"><p><strong>小提示</strong>：批量选择只在<strong>单个笔记本内</strong>可用，智能文件夹和搜索结果里没有。目前也没有「全选」，以及批量打标签/收藏/锁定。</p></blockquote>
-<h2 id="s8">锁定笔记本与笔记</h2>
+<h2 id="s9">锁定笔记本与笔记</h2>
 <p>对含隐私内容的笔记，可以用 Face ID / Touch ID 锁起来。<strong>笔记本和单篇笔记都能锁</strong>：</p>
 <ul><li>锁笔记本：长按侧边栏的笔记本，选「锁定」。</li><li>锁单篇笔记：长按笔记卡片，选「锁定」。</li></ul>
 <p>锁定后：</p>
 <ul><li>打开被锁的笔记本或笔记，都需要先通过 Face ID / Touch ID 验证（设备没有生物识别时会回退到设备密码）。</li><li><strong>解锁或移除锁本身也要先验证</strong>，别人拿到设备也去不掉锁。</li><li>被锁的项目在卡片和列表里只显示一个锁的占位图，不露缩略图。</li><li><strong>在搜索和系统 Spotlight 里，被锁的项目只按标题匹配</strong>，其手写内容、录音转写都不会被搜到，隐私内容不外泄。</li></ul>
-<h2 id="s9">笔记本外观</h2>
+<h2 id="s10">笔记本外观</h2>
 <p>给笔记本换个封面颜色、封面图或图标，一眼就能认出。长按侧边栏的笔记本，菜单里有「<strong>图标</strong>」和「<strong>封面</strong>」两个入口，都会打开外观设置面板，可改三样：</p>
 <ul><li><strong>封面图</strong>——点「选择照片」从相册挑一张图当封面，也可以「移除封面图」。</li><li><strong>颜色</strong>——从预设色环里选一个书脊/封面颜色。</li><li><strong>图标</strong>——从图标网格里选一个 SF Symbol，或选「无图标」。</li></ul>
 <p>此外，打开笔记本后右上角「⋯」里的「笔记本设置」，可以改这本笔记的<strong>默认页模板</strong>和<strong>封面颜色</strong>（这里不含图标和封面图）。</p>
-<h2 id="s10">排序、视图与收藏</h2>
+<h2 id="s11">排序、视图与收藏</h2>
 <p>打开笔记本后，工具条上：</p>
 <ul><li><strong>排序</strong>：左侧下拉菜单，可选「最近修改」「名称」「创建时间」。</li><li><strong>网格 / 列表</strong>：右上角按钮切换两种视图，选择会在全 App（含智能文件夹）记住。</li><li><strong>只看收藏</strong>：工具条上的星形按钮，只显示收藏的笔记。</li></ul>
 <p><strong>收藏</strong>一篇笔记：长按笔记卡片，选「收藏」（再长按可「取消收藏」）。</p>
 <p>侧边栏还有一个「<strong>最近打开</strong>」区，按你最近打开的顺序列出最多 10 篇笔记，方便接着上次继续（仅在没有搜索时显示）。</p>
-<h2 id="s11">回收站</h2>
+<h2 id="s12">回收站</h2>
 <p>删除的笔记本和笔记不会立刻消失，而是先进「回收站」（侧边栏底部）。</p>
 <ul><li><strong>保留 30 天</strong>：删除项保留 30 天，过期后自动清除。</li><li><strong>分区</strong>：回收站分「笔记本」和「笔记」两段；删掉的笔记本里的笔记不会重复列出。</li><li><strong>删除时间</strong>：每项显示「今天删除」或「N 天前删除」。</li><li><strong>恢复</strong>：点某项的「恢复」，笔记 / 笔记本（连同其中所有笔记）都会回到原位。</li><li><strong>永久删除</strong>：点「永久删除」彻底删掉某项（删笔记本会二次确认）。</li><li><strong>清空回收站</strong>：顶部「清空回收站」按钮，确认后永久删除回收站里的全部内容。</li></ul>
 <blockquote class="tip"><p><strong>小提示</strong>：永久删除和清空回收站都<strong>无法恢复</strong>，动手前确认一下。删错了但还没永久删除的，30 天内都能从回收站找回来。</p></blockquote>
@@ -290,7 +293,7 @@
     </article>
     <aside class="toc" aria-label="本页目录">
       <p class="toc-title">本页目录</p>
-      <ol><li><a href="#s1">全库搜索</a></li><li><a href="#s2">笔记本内搜索</a></li><li><a href="#s3">在本文档中查找</a></li><li><a href="#s4">标签</a></li><li><a href="#s5">智能文件夹</a></li><li><a href="#s6">文件夹层级</a></li><li><a href="#s7">批量操作</a></li><li><a href="#s8">锁定笔记本与笔记</a></li><li><a href="#s9">笔记本外观</a></li><li><a href="#s10">排序、视图与收藏</a></li><li><a href="#s11">回收站</a></li></ol>
+      <ol><li><a href="#s1">全库搜索</a></li><li><a href="#s2">笔记本内搜索</a></li><li><a href="#s3">在本文档中查找</a></li><li><a href="#s4">笔记链接与未链接提及</a></li><li><a href="#s5">标签</a></li><li><a href="#s6">智能文件夹</a></li><li><a href="#s7">文件夹层级</a></li><li><a href="#s8">批量操作</a></li><li><a href="#s9">锁定笔记本与笔记</a></li><li><a href="#s10">笔记本外观</a></li><li><a href="#s11">排序、视图与收藏</a></li><li><a href="#s12">回收站</a></li></ol>
     </aside>
 </div>
 <footer>

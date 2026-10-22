@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>插入内容 — Inkelle 使用指南</title>
-<meta name="description" content="文本框、公式（LaTeX）、便签遮盖、链接、图片 / 相机 / 扫描文稿、贴纸" />
+<meta name="description" content="文本框（字号 / 字重 / 颜色）、公式（LaTeX）、便签遮盖、链接与「笔记链接」面板、未链接提及、图片 / 相机 / 扫描文稿、贴纸" />
 <link rel="icon" type="image/png" href="../assets/app-icon.png" />
 <meta property="og:title" content="插入内容 — Inkelle 使用指南" />
-<meta property="og:description" content="文本框、公式（LaTeX）、便签遮盖、链接、图片 / 相机 / 扫描文稿、贴纸" />
+<meta property="og:description" content="文本框（字号 / 字重 / 颜色）、公式（LaTeX）、便签遮盖、链接与「笔记链接」面板、未链接提及、图片 / 相机 / 扫描文稿、贴纸" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="https://inkelle.pages.dev/assets/screenshot-1.png" />
 <style>
@@ -229,8 +229,9 @@
 <h2 id="s1">插入文本框</h2>
 <p>想在手写旁边打一段规整的文字时用它。</p>
 <ol><li>点按 <strong>⋯ 菜单 → 插入文本框</strong>。</li><li>页面中央出现一个空文本框，<strong>长按进入编辑</strong>，直接用键盘输入。</li><li>点框外任意处结束编辑。选中文本框后，右上角有两个按钮：字体按钮（<code>textformat</code> 图标）和红色删除按钮。</li></ol>
-<p><strong>换字体</strong>：选中文本框，点字体按钮，从字体列表里挑一款（System、Helvetica Neue、Avenir Next、Georgia、Times New Roman、Palatino、Menlo、Courier New、Marker Felt、Chalkboard SE、Snell Roundhand、Bradley Hand），选中项右侧会打钩。</p>
-<blockquote class="tip"><p><strong>小提示</strong>：当前版本的文本框<strong>只能选字体族，没有单独的字号、字重、颜色调节界面</strong>。需要突出重点时，可以换一款更醒目的字体（比如 Marker Felt、Chalkboard SE），或改用手写、贴纸来标注。</p></blockquote>
+<p><strong>调样式</strong>：选中文本框，点字体按钮，弹出「文本样式」面板：</p>
+<ul><li><strong>字号</strong>：一排预设（12、14、16、20、24、32、48），也可以用步进器在 8–72 之间逐号微调。</li><li><strong>字重</strong>：「常规」「中等」「半粗」「粗体」四档。</li><li><strong>颜色</strong>：画布墨水的 7 个预设色块，旁边的取色器可以选任意<strong>自定义颜色</strong>。</li><li><strong>字体</strong>：面板下方的字体列表，可选 System、Helvetica Neue、Avenir Next、Georgia、Times New Roman、Palatino、Menlo、Courier New、Marker Felt、Chalkboard SE、Snell Roundhand、Bradley Hand，选中项右侧会打钩。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：面板里每一次调整都会被记住，之后新建的文本框会沿用你上次用的字号、字重和颜色，不用每次重新设置。</p></blockquote>
 <blockquote class="tip"><p><strong>小提示</strong>：用套索圈选一段手写，再选"转文字"，Inkelle 会把它识别成一个文本框直接放到页面上——这是把潦草草稿快速转成规整文字的捷径（详见《书写与画布》一章的套索功能）。</p></blockquote>
 <hr />
 <h2 id="s2">插入公式</h2>
@@ -251,6 +252,9 @@
 <p>点按 <strong>⋯ 菜单 → 插入链接</strong>，弹出 <strong>链接到笔记</strong> 面板，顶部用分段控件在两种模式间切换：</p>
 <ul><li><strong>笔记</strong>：从列表里选一篇其他笔记（可用 <strong>搜索笔记</strong> 框过滤）。点右侧的加号即插入。若暂无可链接的笔记，会显示"没有可链接的笔记"。</li><li><strong>网页链接</strong>：填入网址（如 <code>https://example.com</code>）和可选的 <strong>标签（可选）</strong>，点 <strong>添加链接</strong>。不写 <code>https://</code> 也没关系，Inkelle 会自动补全。</li></ul>
 <p><strong>打开链接</strong>（两段式，防误触）：第一次点是选中（可拖动、删除），<strong>选中状态下再点一次</strong>才真正跳转——网页链接用系统浏览器打开，笔记链接跳到目标笔记。</p>
+<p><strong>在「笔记链接」面板里统一管理</strong>：画布上插入的笔记链接，会同步出现在笔记的链接列表里。打开方式是 <strong>⋯ 菜单 → 笔记链接</strong>。</p>
+<ul><li>列表里每条链接会标明来源：「画布链接」（附「第 N 页」）或「手动链接」。点画布来源的链接，会直接跳到那个链接所在的页面。</li><li>删除画布上指向某篇笔记的最后一个链接后，面板里对应的链接也会一并移除；在面板里手动添加的链接不受影响。</li><li>面板顶部的「复习这个概念的邻域」按钮，会把本笔记及其直接相连笔记的到期抽认卡放在一起复习，详见《学习系统》。</li></ul>
+<p><strong>未链接提及</strong>：面板里的「未链接提及」一栏，会扫描本篇笔记的标题、文字和页面识别出的手写文字，找出提到了其他笔记标题、却还没建立链接的地方，并列出上下文片段。点右侧的「链接」，就为它建立一条手动链接，这一行随即从提及列表里消失。</p>
 <blockquote class="tip"><p><strong>小提示</strong>：如果目标笔记已被删除，点开时页面顶部会短暂提示"目标笔记不存在"，不会静默失败。链接和笔记里的"笔记链接 / 反向链接"功能配合，能织出你自己的知识网络。</p></blockquote>
 <hr />
 <h2 id="s5">插入图片</h2>

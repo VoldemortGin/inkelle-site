@@ -235,6 +235,8 @@
 <div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>挤压唤出预设盘</td><td>开启后，挤压 Apple Pencil Pro 唤出径向笔预设盘。没有 Pencil Pro 时，长按画布也能唤出。</td></tr></tbody></table></div>
 <h3>形状识别 📱</h3>
 <div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>形状识别</td><td>开启后，随手画的圆、方框和箭头会自动规整为工整图形。（默认开启，与画布工具栏里的同名开关联动。）</td></tr></tbody></table></div>
+<h3>橡皮擦 📱</h3>
+<div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>自动取消选中橡皮擦</td><td>默认关闭。开启后，用橡皮擦擦完一笔会自动切回之前使用的工具。</td></tr></tbody></table></div>
 <h3>复习提醒 📱</h3>
 <div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>复习提醒</td><td>默认关闭。开启后，当天有到期闪卡时会发送每日提醒，点击提醒即可开始复习。首次开启会请求通知权限。</td></tr><tr><td>智能时间（Smart timing）</td><td>开启后由 Inkelle 自适应选择提醒时机；关闭则可手动指定时间。</td></tr><tr><td>提醒时间</td><td>关闭「智能时间」时出现，手动设定每天几点提醒。</td></tr></tbody></table></div>
 <blockquote class="tip"><p><strong>小提示</strong>
@@ -242,7 +244,7 @@
 <h3>复习调度</h3>
 <div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>调度算法</td><td>在「标准 (SM-2)」和「自适应 (FSRS)」之间选择。SM-2 是经典间隔重复算法；FSRS 会贴合你真实的记忆表现自适应排程。</td></tr><tr><td>目标记忆保持率</td><td>仅选「自适应 (FSRS)」时出现。用滑块设定目标保持率，数值越高、复习越频繁。</td></tr></tbody></table></div>
 <h3>AI 助手</h3>
-<div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>启用 AI 助手</td><td>总开关。关闭后下面的选项隐藏。</td></tr><tr><td>AI 引擎</td><td>「自动（推荐）」/「端上模型」/「DeepSeek（自带 Key）」三选一。</td></tr><tr><td>端上模型（状态行）</td><td>显示端上模型是否「可用」，或给出不可用原因 / 「需 iOS 26 及兼容设备」。</td></tr><tr><td>DeepSeek API 密钥</td><td>选「DeepSeek（自带 Key）」或「自动」时出现，填入你自己的 DeepSeek 密钥（仅存本机钥匙串）。</td></tr><tr><td>模型</td><td>指定要用的 DeepSeek 模型名。</td></tr><tr><td>测试连接</td><td>用当前密钥发一次探测请求，验证是否连得通。</td></tr><tr><td>高级 → Base URL</td><td>展开后可改用任意 OpenAI 兼容服务的地址。</td></tr><tr><td>DeepSeek 数据授权</td><td>显示「已授权 / 未授权」；可查看隐私政策或「撤销 AI 数据使用授权」。</td></tr></tbody></table></div>
+<div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>启用 AI 助手</td><td>总开关，<strong>新安装默认关闭</strong>。打开后才会显示下面的选项和各处的 AI 按钮；关闭则隐藏。从旧版本升级的用户，若之前已填过 API Key、已授权 DeepSeek 或已完成新手引导，会自动保持开启。</td></tr><tr><td>AI 引擎</td><td>「自动（推荐）」/「端上模型」/「DeepSeek（自带 Key）」三选一。</td></tr><tr><td>端上模型（状态行）</td><td>显示端上模型是否「可用」，或给出不可用原因 / 「需 iOS 26 及兼容设备」。</td></tr><tr><td>DeepSeek API 密钥</td><td>选「DeepSeek（自带 Key）」或「自动」时出现，填入你自己的 DeepSeek 密钥（仅存本机钥匙串，不随 iCloud 或备份迁移）。</td></tr><tr><td>模型</td><td>指定要用的 DeepSeek 模型名。</td></tr><tr><td>测试连接</td><td>用当前密钥发一次探测请求，验证是否连得通。</td></tr><tr><td>高级 → Base URL</td><td>展开后可改用任意 OpenAI 兼容服务的地址。</td></tr><tr><td>DeepSeek 数据授权</td><td>显示「已授权 / 未授权」；可查看隐私政策或「撤销 AI 数据使用授权」。</td></tr></tbody></table></div>
 <blockquote class="tip"><p>AI 引擎、隐私授权、各项 AI 能力的完整说明见<a href="06-ai-assistant.html">第 6 章 · AI 助手</a>。</p></blockquote>
 <h3>同步</h3>
 <div class="table-scroll"><table><thead><tr><th>项</th><th>作用</th></tr></thead><tbody><tr><td>iCloud 同步</td><td>开 / 关 iCloud 同步（仅在 iCloud 可用时显示）。改动会在<strong>下次打开 Inkelle 时生效</strong>，切换后会弹「需要重新启动」提示。</td></tr><tr><td>iCloud（状态行）</td><td>显示当前同步状态：如「iCloud 已同步」「未登录 iCloud」「iCloud 已限制」「本地存储」「iCloud 同步已关闭」等。</td></tr><tr><td>刷新同步状态</td><td>立即重新检查一次同步状态。</td></tr></tbody></table></div>
@@ -262,15 +264,18 @@
 <ol><li>确认已在系统设置登录 iCloud，并开启了 <strong>iCloud 云盘</strong>。</li><li>回到设置 → 同步，点「刷新同步状态」。</li><li>如果你刚切换过「iCloud 同步」开关——它需要<strong>重新启动 App 才生效</strong>（会弹「需要重新启动」提示）。完全退出再打开 Inkelle。</li></ol>
 <blockquote class="tip"><p>如果顶部出现橙色的「存储不可用」类警告，说明本机暂时无法写入，见下方「存储不可用警告」。</p></blockquote>
 <h3>AI 用不了</h3>
-<p>先看你在设置 → AI 助手里选的是哪个引擎。</p>
+<p>先确认设置 → AI 助手里的<strong>「启用 AI 助手」</strong>开关已打开。AI 默认关闭，开关关着时看不到任何 AI 按钮。</p>
+<p>开关已打开仍不能用，再看你选的是哪个引擎。</p>
 <p><strong>端上模型</strong>（状态行给出原因）：</p>
 <ul><li><strong>本设备不支持端上 AI</strong>：设备硬件不满足要求，请改用「DeepSeek（自带 Key）」。</li><li><strong>尚未开启 Apple 智能</strong>：到系统设置里开启 Apple 智能后再回来。</li><li><strong>端上模型尚未就绪（正在下载或准备中）</strong>：模型还在下载 / 准备，联网稍等后重试。</li><li><strong>端上 AI 当前不可用</strong> / 「需 iOS 26 及兼容设备」：系统版本或设备不满足要求。</li></ul>
 <p><strong>DeepSeek（自带 Key）</strong>：</p>
 <ul><li><strong>尚未配置 AI</strong>：还没填密钥。到设置 → AI 助手填入 DeepSeek API Key。</li><li><strong>尚未授权</strong>：第一次用 DeepSeek 需要同意把笔记内容发送给它。按提示授权即可（可随时在设置里撤销）。</li><li><strong>请求失败 / 网络错误</strong>：检查网络、密钥是否有效、Base URL 是否填对，再用「测试连接」验证。</li></ul>
 <p><strong>笔记太长</strong>：如果提示「这则笔记太长，端上模型一次处理不了」，到设置 → AI 助手把引擎切换为 <strong>DeepSeek</strong> 再处理长笔记。</p>
+<h3>换了新 iPad 之后 AI 要重新填 Key？</h3>
+<p>要。DeepSeek API Key 只保存在当前设备的钥匙串里（仅本设备、解锁后可用），不会进入 iCloud 钥匙串，也不包含在备份文件里。所以换新设备、或从备份恢复后，需要到设置 → AI 助手重新填写 Key。笔记、抽认卡等数据不受影响，照常同步或恢复。</p>
 <h3>录音无声 / 转写失败</h3>
 <p>录音本身没问题，但转写要用到麦克风和语音识别权限：</p>
-<ul><li><strong>未获得语音识别授权，无法转写</strong>：到系统设置为 Inkelle 开启「语音识别」权限。</li><li><strong>当前设备或语言不支持语音识别</strong>：换用受支持的语言，或确认设备支持。</li><li><strong>未识别到语音内容</strong>：录音里没检测到可识别的语音，确认录音时麦克风没被遮挡、环境不要太吵。</li><li><strong>转写失败</strong>：稍后重试；持续失败时检查网络与权限。</li></ul>
+<ul><li><strong>未获得语音识别授权，无法转写</strong>：到系统设置为 Inkelle 开启「语音识别」权限。</li><li><strong>当前设备或语言不支持语音识别</strong>：换用受支持的语言，或确认设备支持。</li><li><strong>未识别到语音内容</strong>：录音里没检测到可识别的语音，确认录音时麦克风没被遮挡、环境不要太吵。</li><li><strong>转写失败</strong>：录音本身会保留，画布底部会出现「录音已保存，但转写失败。」横幅，点横幅上的「重试转写」即可只重新转写、不必重录；持续失败时检查网络与权限。</li></ul>
 <blockquote class="tip"><p>首次录音 / 转写时，请在系统弹窗里允许<strong>麦克风</strong>和<strong>语音识别</strong>权限。</p></blockquote>
 <h3>出现「存储不可用」警告</h3>
 <p>如果顶部出现「存储不可用——暂时无法将笔记保存到本设备，本次使用期间的更改可能会丢失」：</p>

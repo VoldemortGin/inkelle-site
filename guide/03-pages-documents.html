@@ -229,6 +229,7 @@
 <p>翻页和加页的控件在画布的翻页栏里（iPad 宽屏在顶栏，iPhone 在紧凑底栏）：</p>
 <ul><li><strong>上一页 / 下一页</strong>：点左右箭头翻页。已在首页时"上一页"变灰，末页时"下一页"变灰。</li><li><strong>页码</strong>：中间显示"当前页 / 总页数"，比如 <code>3 / 8</code>。</li><li><strong>添加页面</strong>：点加号，在当前页之后插入一页新页（继承当前页的纸张尺寸与方向设置）。</li></ul>
 <blockquote class="tip"><p><strong>小提示</strong>：新页会紧跟在你当前所在页的后面，而不是永远加到最后——想在某页后插页，先翻到那一页再点添加。</p></blockquote>
+<p><strong>PDF 笔记也能直接跳页</strong>：从 AI 回答里的引用标签（见《AI 助手》），或任何指向某一页的笔记链接打开一本 PDF 笔记时，会直接翻到指定的那一页；这本笔记已经打开时，也会跳到该页。</p>
 <hr />
 <h2 id="s2">管理页面</h2>
 <p>需要整理页序、批量跳转或删页时，用 <strong>管理页面</strong>。</p>
@@ -263,7 +264,8 @@
 <h2 id="s7">连续滚动</h2>
 <p>默认是一页一页翻的单页模式。打开 <strong>连续滚动</strong> 后，所有页会像长卷一样竖向堆叠，可以直接上下滚动浏览、跨页书写。</p>
 <p>点按 <strong>⋯ 菜单 → 连续滚动</strong>（开关）即可切换，这个偏好会被记住。滚动到底部有 <strong>添加</strong> 页脚可加页。</p>
-<blockquote class="tip"><p><strong>小提示</strong>：连续滚动模式下有几项功能暂不可用，需要它们时请切回单页模式：<strong>套索圈选转 AI（抽认卡 / 数学 / 润色）、套索手写转文字、放大书写、文档内查找、笔迹回放、Apple Pencil 双击切换、橡皮擦</strong>。此外，页数很多的长笔记在这个模式下开销较大，可能略有卡顿。</p></blockquote>
+<p><strong>文档内查找、放大书写、笔迹回放</strong> 在连续滚动模式下也能用：查找命中的结果会自动滚动到对应页；<strong>放大书写</strong> 固定在你打开它时所在的那一页；<strong>笔迹回放</strong> 覆盖在开始回放的那一页上。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：连续滚动模式下有几项功能暂不可用，需要它们时请切回单页模式：<strong>套索圈选转 AI（抽认卡 / 数学 / 润色）、套索手写转文字、Apple Pencil 双击切换、橡皮擦</strong>。此外，页数很多的长笔记在这个模式下开销较大，可能略有卡顿。</p></blockquote>
 <hr />
 <h2 id="s8">纸张尺寸与页面旋转</h2>
 <p><strong>纸张尺寸</strong>：点按 <strong>⋯ 菜单 → 页面尺寸</strong>，从 <strong>默认 / A4 / Letter</strong> 中选一种，并可单独打开 <strong>横向</strong> 开关切成横版。（想要竖版就把"横向"关掉——没有单独的"纵向"选项。）新加的页会继承当前页的尺寸和横向设置。</p>
@@ -276,18 +278,20 @@
 <p><strong>预设版式（7 种，带现成分栏结构）</strong>：</p>
 <div class="table-scroll"><table><thead><tr><th>分类</th><th>版式</th></tr></thead><tbody><tr><td>学习</td><td>SWOT 分析、问答学习笔记、抽认卡</td></tr><tr><td>计划</td><td>习惯打卡表、复习计划、每日时间表</td></tr><tr><td>基础</td><td>点阵+留边</td></tr></tbody></table></div>
 <p><strong>我的模板（自定义导入）</strong>：在"我的模板"分区点 <strong>导入模板</strong>，选一份 <strong>PDF、PNG 或 JPEG</strong> 作为页面背景。长按自定义模板可 <strong>删除</strong>——删除后，用过它的页会恢复为空白背景，<strong>你的笔迹和内容会保留</strong>。</p>
+<p><strong>给自定义模板分类</strong>：长按"我的模板"里的某个模板，选 <strong>设置分类</strong>，可以从已有分类中挑一个，或点 <strong>新建分类…</strong>，在 <strong>新建分类</strong> 里输入「分类名称」。要取消时选 <strong>清除分类</strong>。一旦有模板设了分类，"我的模板"就会按分类分组显示（分类按名称排序，未分类的模板归入末尾的「未分类」）；还没设过任何分类时，仍是平铺的一整片。分类名由你自己起，没有预设名称。</p>
 <p><strong>AI 生成模板</strong>：如果你已配置好 AI，"我的模板"分区旁会有 <strong>AI 生成</strong> 按钮。</p>
 <ol><li>点 <strong>AI 生成</strong>，打开 <strong>AI 生成模板</strong> 面板。</li><li>在 <strong>描述你想要的版式</strong> 里用大白话描述，比如"考研数学错题本，左边写题目，右边写解析，底部留一栏记易错点"。（面板里还有"三栏对比笔记，等分成三列""顶部标题区，下面是带横线的康奈尔笔记"等示例可直接点用。）</li><li>点 <strong>生成模板</strong>，在 <strong>预览</strong> 里查看效果，满意就点 <strong>保存为模板</strong>。生成的模板会存进"我的模板"并应用到当前页；不满意可换个描述重试。</li></ol>
 <hr />
 <h2 id="s10">参考面板</h2>
 <p>一边写笔记、一边对照另一本笔记时用它。</p>
 <p>点按 <strong>⋯ 菜单 → 参考面板</strong>，画布右侧分屏浮出一栏。顶部点 <strong>选择笔记</strong> 选一本要参考的笔记，底部 <strong>上一页 / 下一页</strong> 翻阅它的内容。用完点 <strong>关闭参考面板</strong>（菜单项也会变成"隐藏参考面板"）。</p>
-<blockquote class="tip"><p><strong>小提示</strong>：参考面板是<strong>只读</strong>的——只显示对照笔记的模板背景和手写墨迹，<strong>不能在里面编辑</strong>，也不会显示对方页面上的文本框、图片、公式等标注。你选的参考笔记会被记住，下次打开面板还在。</p></blockquote>
+<p>参考面板现在按导出 PDF 的效果完整渲染对照页：PDF 背景、纸张模板、笔迹，以及文本框、公式、便签、图片等各类标注都会显示，纸张是与导出一致的暖白「打印预览」色。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：参考面板是<strong>只读</strong>的，<strong>不能在里面编辑</strong>。你选的参考笔记会被记住，下次打开面板还在。</p></blockquote>
 <hr />
 <h2 id="s11">演示模式</h2>
 <p>把笔记投到大屏讲解时用它。点按 <strong>⋯ 菜单 → 演示模式</strong>，进入全屏黑底展示：</p>
 <ul><li><strong>翻页</strong>：左右滑动，或点底部箭头。（在 Mac 上可用左右方向键翻页、Esc 退出。）</li><li><strong>激光笔</strong>：点底部的圆点按钮开启，拖动即可用红点圈画重点（Mac 上跟随鼠标）。</li><li>点右下角关闭按钮退出。</li></ul>
-<blockquote class="tip"><p><strong>小提示</strong>：演示模式只渲染模板背景和手写墨迹，<strong>页面上的文本框、图片、公式、便签、链接等标注不会显示</strong>，页面旋转也会被忽略。若讲解内容依赖这些元素，建议改用导出 PDF 来投屏。</p></blockquote>
+<p>演示模式现在同样按导出效果完整渲染每一页：PDF 背景、纸张模板、笔迹，以及文本框、公式、便签、图片等标注都会显示，纸张为暖白「打印预览」色，所见即导出 PDF 的样子。</p>
 <hr />
 <h2 id="s12">版本历史</h2>
 <p>写错了想回到之前的样子？Inkelle 会自动为每一页留存历史快照。</p>

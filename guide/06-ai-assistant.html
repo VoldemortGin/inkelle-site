@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AI 助手 — Inkelle 使用指南</title>
-<meta name="description" content="端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、套索转 AI、快捷指令" />
+<meta name="description" content="AI 开关、端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、苏格拉底模式、参考范围、引用回原页、套索转 AI、快捷指令" />
 <link rel="icon" type="image/png" href="../assets/app-icon.png" />
 <meta property="og:title" content="AI 助手 — Inkelle 使用指南" />
-<meta property="og:description" content="端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、套索转 AI、快捷指令" />
+<meta property="og:description" content="AI 开关、端上免费引擎与 DeepSeek（自带 Key）、隐私授权、总结 / 问答 / 数学 / 抽认卡 / 测验 / 润色、苏格拉底模式、参考范围、引用回原页、套索转 AI、快捷指令" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="https://inkelle.pages.dev/assets/screenshot-1.png" />
 <style>
@@ -225,6 +225,7 @@
 <p>Inkelle 内置一个 <strong>AI 助手</strong>，能帮你总结笔记、解数学题、生成抽认卡和测验、润色文字。这一章说明它怎么用、两种「引擎」有什么区别、你的笔记数据会不会被上传，以及从哪些地方能唤起它。本章解决的是「AI 到底能帮我做什么、安不安全」的问题。</p>
 <blockquote class="tip"><p><strong>小提示</strong>：AI 助手的主入口在画布右上角的 <strong>⋯ 菜单 → AI 助手</strong>。</p></blockquote>
 <h2 id="s1">两种 AI 引擎</h2>
+<blockquote class="tip"><p><strong>注意</strong>：AI 助手<strong>默认是关闭的</strong>，需要你先到 <strong>设置 → AI 助手</strong> 打开「<strong>启用 AI 助手</strong>」开关，下面的功能才会可用（详见「设置里的 AI 区」）。</p></blockquote>
 <p>Inkelle 支持两种 AI 引擎，你可以在 <strong>设置 → AI 助手 → AI 引擎</strong> 里切换：</p>
 <div class="table-scroll"><table><thead><tr><th>选项</th><th>说明</th></tr></thead><tbody><tr><td><strong>自动（推荐）</strong></td><td>优先用端上模型；端上不可用时，如果你配置了 DeepSeek Key，就用 DeepSeek。</td></tr><tr><td><strong>端上模型</strong></td><td>完全在你的设备上运行，<strong>免费</strong>、<strong>不联网</strong>、<strong>笔记内容不出设备</strong>。</td></tr><tr><td><strong>DeepSeek（自带 Key）</strong></td><td>用你自己的 DeepSeek API Key（BYOK），能处理更长的笔记，但会把内容发送到 DeepSeek 服务器。</td></tr></tbody></table></div>
 <p><strong>端上模型</strong>依托 Apple 智能，用它<strong>零配置、零费用、最私密</strong>。但它有使用条件，设置里的「端上模型」状态行会告诉你当前是否<strong>可用</strong>；不可用时会显示原因：</p>
@@ -238,15 +239,28 @@
 <blockquote class="tip"><p><strong>小提示</strong>：这项授权<strong>完全可选</strong>，只有你主动使用 AI 功能时才会发送数据。你可以<strong>随时</strong>在 <strong>设置 → AI 助手</strong> 里点「<strong>撤销 AI 数据使用授权</strong>」收回它。</p></blockquote>
 <h2 id="s3">设置里的 AI 区</h2>
 <p>在 <strong>设置 → AI 助手</strong> 里：</p>
-<ul><li><strong>启用 AI 助手</strong>：总开关。</li><li><strong>AI 引擎</strong>：见上文（自动 / 端上模型 / DeepSeek）。</li><li><strong>端上模型</strong>状态：显示端上是否<strong>可用</strong>。</li><li>以下几项仅在用到 DeepSeek 时出现：<ul><li><strong>DeepSeek API 密钥</strong>：填入你的 Key（仅存于本机钥匙串，绝不上传）。</li><li><strong>模型</strong>：留空用默认模型即可。</li><li><strong>测试连接</strong>：填好 Key 后点一下，验证是否能连通（成功显示绿勾，失败显示红叉和原因）。</li><li><strong>高级 → Base URL</strong>：默认连 DeepSeek，也可改成任意 OpenAI 兼容服务。</li><li><strong>DeepSeek 数据授权</strong>：显示「已授权 / 未授权」，并可<strong>撤销</strong>。</li></ul></li><li><strong>隐私政策</strong>：查看完整隐私说明。</li></ul>
+<ul><li><strong>启用 AI 助手</strong>：总开关，<strong>新安装时默认关闭</strong>，需要你手动打开；关闭时下面的引擎等选项会收起。</li><li><strong>AI 引擎</strong>：见上文（自动 / 端上模型 / DeepSeek）。</li><li><strong>端上模型</strong>状态：显示端上是否<strong>可用</strong>。</li><li>以下几项仅在用到 DeepSeek 时出现：<ul><li><strong>DeepSeek API 密钥</strong>：填入你的 Key（仅存于本机钥匙串，绝不上传）。</li><li><strong>模型</strong>：留空用默认模型即可。</li><li><strong>测试连接</strong>：填好 Key 后点一下，验证是否能连通（成功显示绿勾，失败显示红叉和原因）。</li><li><strong>高级 → Base URL</strong>：默认连 DeepSeek，也可改成任意 OpenAI 兼容服务。</li><li><strong>DeepSeek 数据授权</strong>：显示「已授权 / 未授权」，并可<strong>撤销</strong>。</li></ul></li><li><strong>隐私政策</strong>：查看完整隐私说明。</li></ul>
+<blockquote class="tip"><p><strong>小提示</strong>：如果你是从旧版本升级的老用户，并且之前已经填过 DeepSeek Key、授权过 AI 数据使用，或已完成首次引导，升级后 AI 会自动保持开启，不用重新设置。</p></blockquote>
 <h2 id="s4">AI 助手能做什么</h2>
 <p>从 <strong>⋯ 菜单 → AI 助手</strong> 打开后，会看到一份针对<strong>当前这篇笔记</strong>的功能列表：</p>
-<ul><li><strong>总结本笔记</strong> —— 提炼要点与核心信息。</li><li><strong>课堂纪要</strong> —— 从录音一键生成结构化纪要（仅当笔记带录音时出现，详见<a href="05-audio-lecture.html">第 5 章</a>）。</li><li><strong>问答 Ask AI</strong> —— 就这则笔记内容提问。</li><li><strong>数学求解</strong> —— 识别算式并分步求解。</li><li><strong>生成抽认卡</strong> —— 从笔记生成记忆卡片。</li><li><strong>从康奈尔笔记生成抽认卡</strong> —— 把线索作为问题、笔记作为答案（仅当笔记用了康奈尔模板时出现）。</li><li><strong>生成测验</strong> —— 从笔记生成测验题。</li><li><strong>文本润色</strong> —— 修语法 / 改写 / 精简。</li></ul>
+<ul><li><strong>总结本笔记</strong> —— 提炼要点与核心信息。</li><li><strong>课堂纪要</strong> —— 从录音一键生成结构化纪要（仅当笔记带录音时出现，详见<a href="05-audio-lecture.html">第 5 章</a>）。</li><li><strong>问答 Ask AI</strong> —— 就这则笔记内容提问，右上角可切换<strong>苏格拉底模式</strong>。</li><li><strong>数学求解</strong> —— 识别算式并分步求解。</li><li><strong>生成抽认卡</strong> —— 从笔记生成记忆卡片。</li><li><strong>从康奈尔笔记生成抽认卡</strong> —— 把线索作为问题、笔记作为答案（仅当笔记用了康奈尔模板时出现）。</li><li><strong>生成测验</strong> —— 从笔记生成测验题。</li><li><strong>文本润色</strong> —— 修语法 / 改写 / 精简。</li></ul>
 <blockquote class="tip"><p><strong>小提示</strong>：如果列表提示「AI 助手未配置」，说明你选了 DeepSeek 引擎但还没填 Key。去 <strong>设置 → AI 助手</strong> 填入 DeepSeek API Key，或把引擎改成<strong>端上模型</strong>即可。</p></blockquote>
 <h3>总结本笔记</h3>
 <p>一键把整篇笔记提炼成要点。总结结果可以复制，也可以<strong>存为笔记</strong>单独保存。</p>
 <h3>问答 Ask AI</h3>
-<p>就这篇笔记的内容向 AI 提问，例如「这则笔记的重点是什么？」。回答是逐字流式显示的。如果这篇笔记和其他笔记有关联，顶部还能切换<strong>提问范围</strong>：本篇 / 整本笔记本 / 链接笔记。</p>
+<p>就这篇笔记的内容向 AI 提问，例如「这则笔记的重点是什么？」。回答是逐字流式显示的。如果这篇笔记还有同笔记本、同标签或有链接关系的其他笔记，顶部会出现「<strong>范围</strong>」选择器（见下文「选择 AI 的参考范围」），让 AI 同时参考更多笔记。</p>
+<p>回答里的出处会以「<strong>p.3</strong>」这样的小标签（引用 chip）标在句子后面；如果出处来自别的笔记，标签前还会带上笔记名，例如「物理笔记 · p.3」。<strong>点一下标签</strong>，就会跳到对应笔记的那一页，并在页面上用半透明的主题色<strong>高亮出相关的那行手写文字</strong>，大约 3 秒后自动淡出。如果 AI 的某句话不是来自你的笔记，句子后会带一个「<strong>不在你的笔记里</strong>」的提示，提醒你这句需要自己核实。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：手写页的高亮依赖手写识别（OCR）的结果——这一页还没被识别过，或者没有匹配到对应文字时，只会跳转到那一页，不会出现高亮。导入的 PDF 则走文本层：有文本层的 PDF 会高亮命中文字，扫描版 PDF 只跳页。</p></blockquote>
+<h3>苏格拉底模式</h3>
+<p>在问答界面右上角点<strong>学士帽</strong>图标（「<strong>苏格拉底模式</strong>」）即可开启，再点一次关闭，开关状态会被记住。开启后 AI 变成一位导师：<strong>一次只问你一个引导问题，不直接给答案</strong>，帮你自己想明白。</p>
+<p>如果你卡住了，点输入框旁的灯泡按钮「<strong>提示</strong>」，提示会逐级升级：先<strong>轻轻推一下</strong>，再<strong>缩小思考范围</strong>，第三次才会<strong>直接讲解答案</strong>。你再发出下一条消息后，提示级别会重置。</p>
+<p>当 AI 判断你在某个概念上卡住了，回答下方会出现「<strong>存为闪卡</strong>」按钮，一键把这个概念做成抽认卡；存之前可以先点「<strong>编辑</strong>」改好问题和答案，存好后按钮会变成「已存为闪卡」。苏格拉底模式的回答同样带有 p.N 引用标签，可以点开回到原页。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：考前想检验自己是不是真的懂，用苏格拉底模式比直接问答案更有效。</p></blockquote>
+<h3>选择 AI 的参考范围</h3>
+<p>当一篇笔记所在的笔记本里还有别的笔记、带有共同标签、或与其他笔记互相链接时，<strong>问答</strong>、<strong>总结</strong>、<strong>生成测验</strong>和<strong>生成抽认卡</strong>的界面里会出现「<strong>范围</strong>」选择器，可选：</p>
+<ul><li><strong>本篇</strong> —— 只参考当前这篇笔记（默认）。</li><li><strong>本笔记本</strong> —— 参考整个笔记本。</li><li><strong>标签：xxx</strong> —— 参考带有该标签的所有笔记。</li><li><strong>链接邻域</strong> —— 参考与当前笔记互相链接的笔记。</li></ul>
+<p>当前这篇笔记始终包含在范围内；如果这篇笔记没有任何可扩展的范围，选择器就不会出现。</p>
+<blockquote class="tip"><p><strong>小提示</strong>：「总结」切换范围后不会自动重新生成，需要点一下「<strong>重新生成</strong>」才会按新范围出结果。</p></blockquote>
 <h3>数学求解</h3>
 <p><strong>数学求解</strong>有两种模式（顶部切换）：</p>
 <ul><li><strong>求解</strong> —— 你输入算式或题目，AI <strong>分步</strong>给出解答。</li><li><strong>检查步骤</strong> —— 你把<strong>自己的解题步骤</strong>填进「你的解题步骤」框，AI 帮你<strong>检查对错</strong>并给出「检查结果」。</li></ul>
