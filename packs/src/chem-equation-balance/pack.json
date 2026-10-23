@@ -1,0 +1,20 @@
+{
+  "formatVersion": 1,
+  "id": "chem-equation-balance",
+  "name": "化学方程式配平表",
+  "author": "Inkelle",
+  "items": [
+    {
+      "type": "template",
+      "file": "templates/balance-table.png",
+      "category": "化学",
+      "name": "配平练习表"
+    },
+    {
+      "type": "template",
+      "file": "templates/reaction-notes.png",
+      "category": "化学",
+      "name": "反应笔记页"
+    }
+  ]
+}

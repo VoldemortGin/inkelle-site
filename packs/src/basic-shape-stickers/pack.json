@@ -1,0 +1,44 @@
+{
+  "formatVersion": 1,
+  "id": "basic-shape-stickers",
+  "name": "基础标记贴纸",
+  "author": "Inkelle",
+  "items": [
+    {
+      "type": "sticker",
+      "file": "stickers/check.png",
+      "category": "标记",
+      "name": "对勾"
+    },
+    {
+      "type": "sticker",
+      "file": "stickers/cross.png",
+      "category": "标记",
+      "name": "叉"
+    },
+    {
+      "type": "sticker",
+      "file": "stickers/star.png",
+      "category": "标记",
+      "name": "星形"
+    },
+    {
+      "type": "sticker",
+      "file": "stickers/circle.png",
+      "category": "标记",
+      "name": "圆"
+    },
+    {
+      "type": "sticker",
+      "file": "stickers/square.png",
+      "category": "标记",
+      "name": "方块"
+    },
+    {
+      "type": "sticker",
+      "file": "stickers/triangle.png",
+      "category": "标记",
+      "name": "三角"
+    }
+  ]
+}

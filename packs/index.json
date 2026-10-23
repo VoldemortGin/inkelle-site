@@ -1,0 +1,61 @@
+{
+  "formatVersion": 1,
+  "packs": [
+    {
+      "id": "basic-shape-stickers",
+      "name": "基础标记贴纸",
+      "author": "Inkelle",
+      "description": "对勾、叉、星形与基础几何图形，批注和打卡通用。",
+      "category": "贴纸",
+      "version": "1.0.0",
+      "file": "packs/basic-shape-stickers.inkellepack",
+      "sha256": "9ffa0d4d6a95e5ead03dc639d51fd8132d49b352159b4b3bf022a097d4f263c8",
+      "sizeBytes": 3968,
+      "itemCount": 6,
+      "thumbnail": "packs/basic-shape-stickers.png",
+      "minAppVersion": "2.0"
+    },
+    {
+      "id": "chem-equation-balance",
+      "name": "化学方程式配平表",
+      "author": "Inkelle",
+      "description": "方程式配平练习表与反应笔记页。",
+      "category": "化学",
+      "version": "1.0.0",
+      "file": "packs/chem-equation-balance.inkellepack",
+      "sha256": "75e93d13d4aaab54b456f7600b07c2f541b01f74d1f447898af15e4dc3475b71",
+      "sizeBytes": 32082,
+      "itemCount": 2,
+      "thumbnail": "packs/chem-equation-balance.png",
+      "minAppVersion": "2.0"
+    },
+    {
+      "id": "kaoyan-english-writing",
+      "name": "考研英语作文格",
+      "author": "Inkelle",
+      "description": "考研英语大小作文稿纸：方格稿纸、书信横线页、作文提纲页。",
+      "category": "考研",
+      "version": "1.0.0",
+      "file": "packs/kaoyan-english-writing.inkellepack",
+      "sha256": "954fc116d80e65ecefac15b97c0aae915af9e5b79a65fdb8a2a827bec5321ac1",
+      "sizeBytes": 46528,
+      "itemCount": 3,
+      "thumbnail": "packs/kaoyan-english-writing.png",
+      "minAppVersion": "2.0"
+    },
+    {
+      "id": "pomodoro-daily-planner",
+      "name": "每日 Pomodoro 计划",
+      "author": "Inkelle",
+      "description": "每日番茄钟计划、时间轴与每周追踪。",
+      "category": "效率",
+      "version": "1.0.0",
+      "file": "packs/pomodoro-daily-planner.inkellepack",
+      "sha256": "fc0bc9d0535e1bf4d7190d96b533c33ed5831d2dcbe9d5f9afca545d369f7ab8",
+      "sizeBytes": 48805,
+      "itemCount": 3,
+      "thumbnail": "packs/pomodoro-daily-planner.png",
+      "minAppVersion": "2.0"
+    }
+  ]
+}

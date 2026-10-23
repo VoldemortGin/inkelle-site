@@ -1,0 +1,26 @@
+{
+  "formatVersion": 1,
+  "id": "kaoyan-english-writing",
+  "name": "考研英语作文格",
+  "author": "Inkelle",
+  "items": [
+    {
+      "type": "template",
+      "file": "templates/big-essay-grid.png",
+      "category": "考研",
+      "name": "大作文方格稿纸"
+    },
+    {
+      "type": "template",
+      "file": "templates/small-essay-lined.png",
+      "category": "考研",
+      "name": "小作文横线页"
+    },
+    {
+      "type": "template",
+      "file": "templates/essay-outline.png",
+      "category": "考研",
+      "name": "作文提纲页"
+    }
+  ]
+}

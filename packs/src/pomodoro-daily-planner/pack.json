@@ -1,0 +1,26 @@
+{
+  "formatVersion": 1,
+  "id": "pomodoro-daily-planner",
+  "name": "每日 Pomodoro 计划",
+  "author": "Inkelle",
+  "items": [
+    {
+      "type": "template",
+      "file": "templates/daily-plan.png",
+      "category": "效率",
+      "name": "每日番茄计划"
+    },
+    {
+      "type": "template",
+      "file": "templates/timeline.png",
+      "category": "效率",
+      "name": "时间轴"
+    },
+    {
+      "type": "template",
+      "file": "templates/weekly-tracker.png",
+      "category": "效率",
+      "name": "每周番茄追踪"
+    }
+  ]
+}
