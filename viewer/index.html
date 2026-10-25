@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inkelle 在线查看器 · Viewer</title>
+<meta name="description" content="在浏览器中只读查看 .inkelle 笔记，文件不离开你的设备。 Read-only .inkelle viewer; your file never leaves your device." />
+<link rel="icon" type="image/png" href="../assets/app-icon.png" />
+<link rel="canonical" href="https://inkelle.pages.dev/viewer/" />
+<link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../"><img src="../assets/app-icon.png" alt="" width="24" height="24" /><span>Inkelle</span></a>
+  <span class="title" id="noteTitle"></span>
+  <a class="home" href="../" data-i18n="home">返回首页</a>
+</header>
+
+<main>
+  <section id="drop" class="drop" tabindex="0" role="button" aria-label="open file">
+    <h1 data-i18n="heading">在线查看器</h1>
+    <p data-i18n="lead">把 .inkelle 文件拖到这里，或点击选择文件。</p>
+    <button type="button" class="btn" id="pick" data-i18n="choose">选择文件</button>
+    <p class="privacy" data-i18n="privacy">文件不离开你的设备：所有解析与渲染都在本机浏览器中完成，不会上传到任何服务器。</p>
+    <p class="note" data-i18n="readonly">只读预览：支持笔迹、纸张、文本框、图片、图形与胶带；PDF 背景以占位显示。</p>
+  </section>
+  <p id="error" class="error" role="alert" hidden></p>
+
+  <section id="viewer" class="viewer" hidden>
+    <aside id="thumbs" class="thumbs" aria-label="pages"></aside>
+    <div class="stage-wrap">
+      <div class="toolbar">
+        <button type="button" id="prev" aria-label="prev">&#8249;</button>
+        <span id="pageLabel">1 / 1</span>
+        <button type="button" id="next" aria-label="next">&#8250;</button>
+        <span class="sep"></span>
+        <button type="button" id="zoomOut" aria-label="zoom out">&minus;</button>
+        <span id="zoomLabel">100%</span>
+        <button type="button" id="zoomIn" aria-label="zoom in">+</button>
+        <button type="button" id="fit" data-i18n="fit">适应宽度</button>
+        <span class="sep"></span>
+        <button type="button" id="open" data-i18n="openOther">打开其他文件</button>
+      </div>
+      <p id="banner" class="banner" hidden></p>
+      <div id="scroller" class="scroller"><div id="pageBox" class="page-box"></div></div>
+    </div>
+  </section>
+</main>
+<input type="file" id="file" accept=".inkelle,application/zip,application/octet-stream" hidden />
+
+<script src="vendor/fflate.min.js"></script>
+<script src="inkelle-parse.js"></script>
+<script src="viewer.js"></script>
+</body>
+</html>
