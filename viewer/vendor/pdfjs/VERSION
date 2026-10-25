@@ -1,0 +1,2 @@
+pdfjs-dist 4.10.38 (npm tarball sha256 1011b38553532d7078c59f26b15a471f8dae00f101b60e2add9b8511737a1ce0)
+build/pdf.min.mjs -> pdf.min.js, build/pdf.worker.min.mjs -> pdf.worker.min.js (renamed so Pages serves them as JS; still ES modules)
