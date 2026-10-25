@@ -200,6 +200,64 @@ test('viewer renders real App fixtures in Chromium', { skip: !chromium && 'playw
       await page.close();
     });
 
+    await t.test('brush widths follow the App mapping; pencil/crayon grain is seeded', async () => {
+      const page = await browser.newPage();
+      await page.goto(base);
+      const res = await page.evaluate(() => {
+        const V = window.__inkelleViewer, K = 4, W = 400, H = 80;
+        function render(tool, width, seed) {
+          const c = document.createElement('canvas'); c.width = W * K; c.height = H * K;
+          const ctx = c.getContext('2d'); ctx.scale(K, K);
+          V.drawStroke(ctx, { tool, width, seed, color: '#1F70D9FF', points: [[40, 40, 1, 0, 0, 0, width, width, 1], [360, 40, 1, 0, 0, 24, width, width, 1]] });
+          return { c, d: ctx.getImageData(0, 0, c.width, c.height).data };
+        }
+        // vertical extent (page px) of alpha > 5% on columns well inside the stroke
+        function extent(d, w, h) {
+          let sum = 0, n = 0;
+          for (let x = 100 * K; x < 300 * K; x += 8) {
+            let lo = -1, hi = -1;
+            for (let y = 0; y < h; y++) if (d[(y * w + x) * 4 + 3] > 13) { if (lo < 0) lo = y; hi = y; }
+            if (lo >= 0) { sum += (hi - lo + 1) / K; n++; }
+          }
+          return sum / n;
+        }
+        // variance of alpha (0..1) over the stroke's interior band
+        function alphaVar(d, w, halfBand) {
+          let s = 0, s2 = 0, n = 0;
+          for (let y = Math.round((40 - halfBand) * K); y < Math.round((40 + halfBand) * K); y++)
+            for (let x = 100 * K; x < 300 * K; x++) { const a = d[(y * w + x) * 4 + 3] / 255; s += a; s2 += a * a; n++; }
+          return { mean: s / n, variance: s2 / n - (s / n) ** 2 };
+        }
+        const out = { scale: V.strokeWidthScale, widths: {}, variance: {} };
+        [['marker', 18], ['watercolor', 22], ['pencil', 2.5], ['pencil', 6], ['pen', 3]].forEach(([tool, w]) => {
+          const r = render(tool, w, 4151987759);
+          out.widths[tool + w] = extent(r.d, r.c.width, r.c.height);
+          out.variance[tool + w] = alphaVar(r.d, r.c.width, out.widths[tool + w] * 0.3);
+        });
+        const crayon = render('crayon', 10, 77);
+        out.variance.crayon10 = alphaVar(crayon.d, crayon.c.width, extent(crayon.d, crayon.c.width, crayon.c.height) * 0.3);
+        // determinism: same seed twice is byte-identical, a different seed is not
+        const same = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
+        const a = render('pencil', 6, 12345).d, b = render('pencil', 6, 12345).d, c2 = render('pencil', 6, 54321).d;
+        const k = render('crayon', 10, 99).d, k2 = render('crayon', 10, 99).d;
+        out.pencilSame = same(a, b); out.pencilOtherSeed = same(a, c2); out.crayonSame = same(k, k2);
+        return out;
+      });
+      // Expected rendered widths = nominal IPSF width x the scale measured on the App's PNG export
+      // (marker 18 -> ~9.9, watercolor 22 -> ~35, pencil 2.5 -> ~3.9 with the App at 3.93).
+      const expected = { marker18: 18 * 0.55, watercolor22: 22 * 1.6, 'pencil2.5': 3.93, pencil6: 6 * 1.5, pen3: 3 };
+      for (const [k, want] of Object.entries(expected)) {
+        const got = res.widths[k];
+        assert.ok(Math.abs(got - want) / want <= 0.10, `${k}: width ${got.toFixed(2)} vs App ${want.toFixed(2)} (+-10%)`);
+      }
+      assert.ok(res.variance.pen3.variance < 0.002, `pen must stay flat: ${JSON.stringify(res.variance.pen3)}`);
+      assert.ok(res.variance.pencil6.variance > 0.01, `pencil grain too weak: ${JSON.stringify(res.variance.pencil6)}`);
+      assert.ok(res.variance.crayon10.variance > 0.02, `crayon grain too weak: ${JSON.stringify(res.variance.crayon10)}`);
+      assert.ok(res.pencilSame && res.crayonSame, 'same seed must render pixel-identical');
+      assert.equal(res.pencilOtherSeed, false, 'a different seed must change the grain');
+      await page.close();
+    });
+
     await t.test('all 25 paper templates draw', async () => {
       const page = await browser.newPage();
       await page.goto(base);

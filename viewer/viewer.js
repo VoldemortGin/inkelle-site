@@ -322,6 +322,72 @@
     return segs;
   }
 
+  // PencilKit nib width -> rendered width, measured on the App's PNG export of the IPSF fixture
+  // (coverage-integrated perpendicular width / nominal IPSF width): marker 0.55, watercolor 1.6,
+  // pencil 1.5. Crayon has no App sample yet and stays at 1.
+  var STROKE_WIDTH_SCALE = { marker: 0.55, watercolor: 1.6, pencil: 1.5, crayon: 1 };
+  var GRAIN = { pencil: 1, crayon: 1 };
+  var TILE = 128;
+
+  /** mulberry32: tiny seeded PRNG; the IPSF texture seed makes pencil/crayon grain deterministic. */
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /** Seeded grain tile: alpha = how much ink is knocked out of each device pixel. */
+  function grainTile(tool, seed) {
+    var rnd = mulberry32(seed), c = document.createElement('canvas');
+    c.width = c.height = TILE;
+    var g = c.getContext('2d'), img = g.createImageData(TILE, TILE), d = img.data;
+    for (var i = 0; i < TILE * TILE; i++) {
+      var r = rnd(), keep = tool === 'crayon' ? (r < 0.3 ? 0.1 : 0.8 + 0.2 * r) : 0.5 + 0.5 * r;
+      d[i * 4 + 3] = Math.round((1 - keep) * 255);
+    }
+    g.putImageData(img, 0, 0);
+    return c;
+  }
+
+  /** Offscreen layer (device pixels) covering the stroke's bounds; null when it is off-canvas. */
+  function grainLayer(ctx, pts, w, seed) {
+    var m = ctx.getTransform(), x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach(function (p) {
+      var x = m.a * p[0] + m.c * p[1] + m.e, y = m.b * p[0] + m.d * p[1] + m.f;
+      x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+    });
+    var pad = w * Math.hypot(m.a, m.b) + 2;
+    var bx = Math.max(0, Math.floor(x0 - pad)), by = Math.max(0, Math.floor(y0 - pad));
+    var ex = Math.min(ctx.canvas.width, Math.ceil(x1 + pad)), ey = Math.min(ctx.canvas.height, Math.ceil(y1 + pad));
+    if (ex <= bx || ey <= by) return null;
+    var c = document.createElement('canvas');
+    c.width = ex - bx; c.height = ey - by;
+    var g = c.getContext('2d');
+    g.setTransform(1, 0, 0, 1, -bx, -by);
+    g.transform(m.a, m.b, m.c, m.d, m.e, m.f);
+    return { canvas: c, ctx: g, x: bx, y: by };
+  }
+
+  function applyGrain(ctx, layer, tool, seed) {
+    var g = layer.ctx, pat = g.createPattern(grainTile(tool, seed || 1), 'repeat');
+    g.save();
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalCompositeOperation = 'destination-out';
+    g.fillStyle = pat;
+    g.translate(-layer.x, -layer.y);
+    g.fillRect(layer.x, layer.y, layer.canvas.width, layer.canvas.height);
+    g.restore();
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(layer.canvas, layer.x, layer.y);
+    ctx.restore();
+  }
+
   function drawStroke(ctx, s) {
     var pts = s.points;
     if (!pts.length) return;
@@ -338,16 +404,25 @@
       var alpha = col.a * clamp(avgOp, 0, 1);
       if (tool === 'marker') { if (col.a >= 0.99) alpha = 0.85 * avgOp; ctx.globalCompositeOperation = 'multiply'; }
       else if (tool === 'watercolor') { alpha *= 0.9; ctx.globalCompositeOperation = 'multiply'; }
+      else if (GRAIN[tool]) alpha = col.a * clamp(avgOp, 0, 1); // grain below supplies the translucency
       else alpha *= 0.9;
-      ctx.strokeStyle = rgba(col, alpha); ctx.fillStyle = ctx.strokeStyle;
-      // PencilKit's marker nib paints ~0.55x its nominal width in the App's export.
-      ctx.lineWidth = tool === 'marker' ? avgW * 0.55 : avgW;
-      if (!segs.length) { ctx.beginPath(); ctx.arc(pts[0][0], pts[0][1], avgW / 2, 0, 6.2832); ctx.fill(); }
-      else {
-        ctx.beginPath(); ctx.moveTo(segs[0][0], segs[0][1]);
-        segs.forEach(function (g) { ctx.bezierCurveTo(g[2], g[3], g[4], g[5], g[6], g[7]); });
-        ctx.stroke();
+      // PencilKit paints each nib at a multiple of its nominal width (STROKE_WIDTH_SCALE).
+      var drawW = avgW * (STROKE_WIDTH_SCALE[tool] || 1);
+      var paint = ctx, tmp = null, org = null;
+      if (GRAIN[tool]) {
+        tmp = grainLayer(ctx, pts, drawW, s.seed);
+        if (tmp) { paint = tmp.ctx; org = tmp; }
       }
+      paint.lineCap = 'round'; paint.lineJoin = 'round';
+      paint.strokeStyle = rgba(col, alpha); paint.fillStyle = paint.strokeStyle;
+      paint.lineWidth = drawW;
+      if (!segs.length) { paint.beginPath(); paint.arc(pts[0][0], pts[0][1], drawW / 2, 0, 6.2832); paint.fill(); }
+      else {
+        paint.beginPath(); paint.moveTo(segs[0][0], segs[0][1]);
+        segs.forEach(function (g) { paint.bezierCurveTo(g[2], g[3], g[4], g[5], g[6], g[7]); });
+        paint.stroke();
+      }
+      if (org) applyGrain(ctx, org, tool, s.seed);
       ctx.restore(); return;
     }
 
@@ -785,7 +860,7 @@
 
   // Test hook (read-only): lets the browser test drive the viewer and read render state.
   window.__inkelleViewer = {
-    state: state, showPage: showPage, templates: Tpl.names, drawTemplate: Tpl.draw,
+    state: state, showPage: showPage, drawStroke: drawStroke, strokeWidthScale: STROKE_WIDTH_SCALE, templates: Tpl.names, drawTemplate: Tpl.draw,
     renderFlat: function (i, canvas, res) { return renderPage(state.note, state.note.pages[i], canvas, res, undefined, true); },
   };
 })();
