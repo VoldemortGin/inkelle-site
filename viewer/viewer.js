@@ -600,8 +600,70 @@
     } else { ctx.fillStyle = rgba(base, 1); ctx.fill(); }
   }
 
+  /** Greedy line-wrap of `text` into `maxW` (words stay whole; CJK breaks per character), honoring newlines. */
+  function wrapLines(ctx, text, maxW) {
+    var out = [];
+    String(text).split('\n').forEach(function (para) {
+      var tokens = para.match(/[\u2E80-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF]|[^\s\u2E80-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF]+|\s+/g) || [''];
+      var line = '';
+      tokens.forEach(function (tk) {
+        var next = line + tk;
+        if (line && !/^\s+$/.test(tk) && ctx.measureText(next).width > maxW) { out.push(line.replace(/\s+$/, '')); line = tk; }
+        else line = next;
+      });
+      out.push(line.replace(/\s+$/, ''));
+    });
+    return out;
+  }
+
+  /** CTFrameDraw-like text box: wrapped lines from the top of `box`, clipped to it. */
+  function drawTextBox(ctx, text, box, font, color) {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(box.x, box.y, box.width, box.height); ctx.clip();
+    ctx.font = font; ctx.fillStyle = color; ctx.textBaseline = 'alphabetic';
+    var m = ctx.measureText('Hg'), asc = m.fontBoundingBoxAscent || m.actualBoundingBoxAscent;
+    var lh = asc + (m.fontBoundingBoxDescent || m.actualBoundingBoxDescent);
+    wrapLines(ctx, text, box.width).forEach(function (ln, i) { ctx.fillText(ln, box.x, box.y + asc + i * lh); });
+    ctx.restore();
+  }
+
+  /** Text boxes as ExportService.renderTextAnnotations draws them (Helvetica unless fontName is set). */
+  function flatTexts(ctx, page) {
+    page.texts.forEach(function (t) {
+      if (!t.text) return;
+      var bold = t.fontWeight === 'bold' || t.fontWeight === 'semibold';
+      var fam = t.fontName ? '"' + String(t.fontName).replace(/["\\]/g, '') + '", Helvetica, Arial, sans-serif' : 'Helvetica, Arial, sans-serif';
+      drawTextBox(ctx, t.text, t, (bold ? '700 ' : '400 ') + t.fontSize + 'px ' + fam, rgba(P.parseColor(t.colorHex, INK)));
+    });
+  }
+
+  /** Equations as the App's synchronous PNG/PDF export draws them: Menlo 14 LaTeX source in #1A1A1A, inset 4. */
+  function flatEquations(ctx, page) {
+    page.equations.forEach(function (q) {
+      var latex = String(q.latex || '').trim();
+      if (!latex) return;
+      drawTextBox(ctx, latex, { x: q.x + 4, y: q.y + 4, width: q.width - 8, height: q.height - 8 },
+        '14px Menlo, ui-monospace, monospace', rgba(INK));
+    });
+  }
+
+  /** Link chips as ExportService.renderLinkAnnotations: accent fill .10 / stroke .35, label inset 26 / 12, centered. */
+  function flatLinks(ctx, page) {
+    page.links.forEach(function (l) {
+      ctx.beginPath(); Tpl.roundRect(ctx, l.x, l.y, l.width, l.height, 8);
+      ctx.fillStyle = rgba(ACCENT, 0.10); ctx.fill();
+      ctx.strokeStyle = rgba(ACCENT, 0.35); ctx.lineWidth = 1; ctx.stroke();
+      var url = l.externalURL && /^https?:\/\//i.test(l.externalURL) ? l.externalURL : null;
+      var label = l.label || (url ? url : (lang === 'zh' ? '链接' : 'Link'));
+      var lh = 13 * 1.35;
+      drawTextBox(ctx, label, { x: l.x + 26, y: l.y + l.height / 2 - lh / 2, width: Math.max(0, l.width - 38), height: lh },
+        '13px Helvetica, Arial, sans-serif', rgba(ACCENT));
+    });
+  }
+
   /** Draws paper (template or PDF page), ink and shapes into `canvas` at `res` px per page unit.
-   *  With `flat`, images and tape are rasterized too (thumbnails); the main stage shows them as DOM. */
+   *  With `flat`, text, images, equations, tape and links are rasterized too in ExportService z-order
+   *  (thumbnails / PNG parity); the main stage shows them as DOM. */
   async function renderPage(note, page, canvas, res, token, flat) {
     var w = page.size.w, h = page.size.h;
     canvas.width = Math.max(1, Math.round(w * res)); canvas.height = Math.max(1, Math.round(h * res));
@@ -630,6 +692,7 @@
     }
     page.shapes.forEach(function (sh) { drawShape(ctx, sh); });
     if (!flat) return;
+    flatTexts(ctx, page);
     for (var i = 0; i < page.images.length; i++) {
       var ia = page.images[i], bmp = await loadImage(ia);
       if (token !== undefined && token !== state.token) return;
@@ -643,7 +706,9 @@
       ctx.drawImage(bmp, -dw / 2, -dh / 2, dw, dh);
       ctx.restore();
     }
+    flatEquations(ctx, page);
     page.tapes.forEach(function (t) { tapeRect(ctx, t); });
+    flatLinks(ctx, page);
   }
 
   // ---------- DOM overlays (z-order: text → image → equation → tape → link, as in ExportService) ----------

@@ -170,7 +170,7 @@ test('viewer renders real App fixtures in Chromium', { skip: !chromium && 'playw
         if (png && existsSync(png)) {
           const cmp = await compareWithApp(page, i, png);
           console.log(`ink p${i}`, JSON.stringify(cmp));
-          assert.ok(cmp.precision > 0.9, `page ${i + 1} viewer ink not where the App draws it: ${JSON.stringify(cmp)}`);
+          assert.ok(cmp.precision > 0.9 && cmp.recall > 0.95, `page ${i + 1} viewer ink differs from the App: ${JSON.stringify(cmp)}`);
         }
       }
       assert.deepEqual(errors, []);
